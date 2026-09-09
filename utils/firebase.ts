@@ -3,12 +3,13 @@ import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 // Replace with your actual Firebase project config
 const firebaseConfig = {
-  apiKey: "AIzaSyDummyKeyReplaceMeForRealApp",
-  authDomain: "lapadia-fresh.firebaseapp.com",
-  projectId: "lapadia-fresh",
-  storageBucket: "lapadia-fresh.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:abcdef123456"
+  apiKey: "AIzaSyDGuK8kSUxEJyBN02g_Bu4m0nmHL5jUuOo",
+  authDomain: "lapadia-1e837.firebaseapp.com",
+  projectId: "lapadia-1e837",
+  storageBucket: "lapadia-1e837.firebasestorage.app",
+  messagingSenderId: "26108801817",
+  appId: "1:26108801817:web:d6bf095dc409ed44038b88",
+  measurementId: "G-ZFKMQ2L2SD"
 };
 
 export const initFirebase = () => {
