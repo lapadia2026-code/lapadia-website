@@ -237,6 +237,7 @@ import { useCreateOrder } from '~/composables/modules/orders/useCreateOrder';
 import { useCart } from '~/composables/modules/cart/useCart';
 import { useSettings } from '~/composables/modules/settings/useSettings';
 import { GATEWAY_ENDPOINT } from '~/api_factory/axios.config';
+import { useCustomToast } from '~/composables/core/useCustomToast';
 
 const route = useRoute();
 const { cart, cartTotal, updateQuantity, removeFromCart } = useCart();
