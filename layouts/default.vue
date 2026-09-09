@@ -58,10 +58,8 @@
               Farm-fresh groceries and everyday essentials delivered directly to your doorstep in minutes. Experience the new standard of fresh.
             </p>
             <div class="flex gap-4">
-              <!-- Social Icons Placeholder -->
-              <a href="#" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-blue-600 flex items-center justify-center text-white transition-colors"><span class="sr-only">Twitter</span>𝕏</a>
-              <a href="#" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-blue-600 flex items-center justify-center text-white transition-colors"><span class="sr-only">Instagram</span>📸</a>
-              <a href="#" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-blue-600 flex items-center justify-center text-white transition-colors"><span class="sr-only">Facebook</span>f</a>
+              <!-- Social Icons -->
+              <a href="https://www.instagram.com/lapadia_ng?stkn=cTRjanpqaW1iNjBy&utm_source=qr" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-slate-800 hover:bg-blue-600 flex items-center justify-center text-white transition-colors"><span class="sr-only">Instagram</span>📸</a>
             </div>
           </div>
           
