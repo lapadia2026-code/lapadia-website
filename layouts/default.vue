@@ -144,6 +144,22 @@ const { toasts } = useCustomToast();
 const { cartItemCount } = useCart();
 const { isLoggedIn, user, initAuth } = useAuth();
 
+useSeoMeta({
+  titleTemplate: (titleChunk) => {
+    return titleChunk ? `${titleChunk} - Lapadia Fresh` : 'Lapadia Fresh - Groceries Delivered in Minutes';
+  },
+  description: 'Farm-fresh groceries, vegetables, fruits, and everyday essentials delivered directly to your doorstep in minutes. Experience the new standard of fresh with Lapadia Fresh.',
+  ogTitle: 'Lapadia Fresh - Groceries Delivered in Minutes',
+  ogDescription: 'Farm-fresh groceries, vegetables, fruits, and everyday essentials delivered directly to your doorstep in minutes. Experience the new standard of fresh.',
+  ogImage: 'https://lapadia.org/images/logo.jpg', // Placeholder logo url
+  ogUrl: 'https://lapadia.org',
+  twitterTitle: 'Lapadia Fresh - Groceries Delivered in Minutes',
+  twitterDescription: 'Farm-fresh groceries, vegetables, fruits, and everyday essentials delivered directly to your doorstep in minutes.',
+  twitterImage: 'https://lapadia.org/images/logo.jpg',
+  twitterCard: 'summary_large_image',
+  themeColor: '#2563eb'
+});
+
 onMounted(() => {
   initAuth();
   window.addEventListener('storage', initAuth);

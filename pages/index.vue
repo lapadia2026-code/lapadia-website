@@ -203,6 +203,13 @@ const { loading, error, products, getProducts } = useGetProducts();
 const { addToCart } = useCart();
 const { toggleFavorite: toggleFav, isFavorite: checkFavorite } = useFavorites();
 
+useSeoMeta({
+  title: 'Lapadia Fresh - Groceries Delivered in Minutes',
+  description: 'Shop fresh fruits, vegetables, and daily essentials with Lapadia Fresh. Lightning-fast delivery right to your door.',
+  ogTitle: 'Lapadia Fresh - Groceries Delivered in Minutes',
+  ogDescription: 'Shop fresh fruits, vegetables, and daily essentials with Lapadia Fresh. Lightning-fast delivery right to your door.'
+});
+
 // Carousel State
 const activeIndex = ref(0);
 let carouselInterval: any = null;

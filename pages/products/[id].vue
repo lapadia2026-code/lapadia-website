@@ -229,6 +229,17 @@ onMounted(async () => {
   try {
     const res = await GATEWAY_ENDPOINT.get(`/products/${route.params.id}`);
     product.value = res.data;
+    
+    useSeoMeta({
+      title: `${product.value.name} - Lapadia Fresh`,
+      description: product.value.description,
+      ogTitle: `${product.value.name} - Lapadia Fresh`,
+      ogDescription: product.value.description,
+      ogImage: getHeroImage(product.value),
+      twitterTitle: `${product.value.name} - Lapadia Fresh`,
+      twitterDescription: product.value.description,
+      twitterImage: getHeroImage(product.value)
+    });
   } catch (error) {
     console.error(error);
   } finally {

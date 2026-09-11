@@ -80,6 +80,24 @@ onMounted(async () => {
   try {
     const res = await GATEWAY_ENDPOINT.get(`/blogs/${route.params.slug}`);
     blog.value = res.data;
+    
+    // Create an excerpt from content
+    let excerpt = blog.value.excerpt;
+    if (!excerpt && blog.value.content) {
+      const stripped = blog.value.content.replace(/<[^>]+>/g, '');
+      excerpt = stripped.substring(0, 160) + '...';
+    }
+
+    useSeoMeta({
+      title: `${blog.value.title} - Lapadia Blog`,
+      description: excerpt || 'Read the latest from Lapadia Fresh',
+      ogTitle: `${blog.value.title} - Lapadia Blog`,
+      ogDescription: excerpt || 'Read the latest from Lapadia Fresh',
+      ogImage: blog.value.coverImage || 'https://lapadia.org/images/logo.jpg',
+      twitterTitle: `${blog.value.title} - Lapadia Blog`,
+      twitterDescription: excerpt || 'Read the latest from Lapadia Fresh',
+      twitterImage: blog.value.coverImage || 'https://lapadia.org/images/logo.jpg'
+    });
   } catch (error) {
     console.error('Failed to fetch blog', error);
   } finally {

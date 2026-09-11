@@ -103,6 +103,17 @@ onMounted(async () => {
   try {
     const res = await GATEWAY_ENDPOINT.get(`/events/${route.params.slug}`);
     event.value = res.data;
+    
+    useSeoMeta({
+      title: `${event.value.title} - Lapadia Events`,
+      description: event.value.description,
+      ogTitle: `${event.value.title} - Lapadia Events`,
+      ogDescription: event.value.description,
+      ogImage: event.value.image || 'https://lapadia.org/images/logo.jpg',
+      twitterTitle: `${event.value.title} - Lapadia Events`,
+      twitterDescription: event.value.description,
+      twitterImage: event.value.image || 'https://lapadia.org/images/logo.jpg'
+    });
   } catch (error) {
     console.error('Failed to fetch event', error);
   } finally {
