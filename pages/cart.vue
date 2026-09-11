@@ -11,7 +11,7 @@
       </NuxtLink>
     </div>
 
-    <div v-else class="flex flex-col lg:flex-row gap-12">
+    <div v-else class="flex flex-col lg:flex-row gap-12 md:gap-20">
       <!-- Cart Items -->
       <div class="flex-1 space-y-6">
         <div v-for="item in cart" :key="item.product._id" class="flex gap-6 p-4 bg-white rounded-2xl border border-slate-100 shadow-sm items-center">

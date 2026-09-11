@@ -76,7 +76,7 @@
     <!-- Footer -->
     <footer class="bg-slate-900 pt-16 pb-8 border-t border-slate-800">
       <div class="max-w-7xl mx-auto px-4">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 md:p-12 mb-16">
           <div class="lg:col-span-2">
             <NuxtLink to="/" class="flex items-center gap-3 mb-6 inline-block">
               <img src="@/assets/img/logo.jpg" class="h-20 w-auto rounded-full" />

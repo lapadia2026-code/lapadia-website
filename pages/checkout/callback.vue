@@ -7,7 +7,7 @@
       <div class="h-4 bg-slate-200 rounded w-2/4"></div>
     </div>
     
-    <div v-else-if="success" class="bg-white p-12 rounded-3xl border border-slate-100 shadow-xl text-center">
+    <div v-else-if="success" class="bg-white p-6 md:p-12 rounded-3xl border border-slate-100 shadow-xl text-center">
       <div class="w-24 h-24 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-2xl md:text-4xl mx-auto mb-6">
         <svg class="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
       </div>
@@ -18,7 +18,7 @@
       </NuxtLink>
     </div>
 
-    <div v-else class="bg-white p-12 rounded-3xl border border-rose-100 shadow-xl text-center">
+    <div v-else class="bg-white p-6 md:p-12 rounded-3xl border border-rose-100 shadow-xl text-center">
       <div class="w-24 h-24 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center text-2xl md:text-4xl mx-auto mb-6">
         <svg class="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>
       </div>

@@ -12,7 +12,7 @@
         </NuxtLink>
       </div>
 
-      <div v-if="loading" class="animate-pulse flex flex-col md:flex-row gap-12">
+      <div v-if="loading" class="animate-pulse flex flex-col md:flex-row gap-12 md:gap-20">
         <div class="w-full md:w-1/2 h-[500px] bg-slate-200/50 rounded-3xl"></div>
         <div class="w-full md:w-1/2 space-y-6 pt-12">
           <div class="h-12 bg-slate-200/50 rounded w-3/4"></div>
@@ -22,7 +22,7 @@
         </div>
       </div>
 
-      <div v-else-if="product" class="flex flex-col md:flex-row gap-12 lg:gap-20">
+      <div v-else-if="product" class="flex flex-col md:flex-row gap-12 md:gap-20 lg:gap-20">
         <!-- Product Image (Hero style) -->
         <div class="w-full md:w-1/2 flex items-center justify-center relative min-h-[400px] md:min-h-[600px]">
           <div 

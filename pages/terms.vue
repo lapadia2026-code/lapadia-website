@@ -1,6 +1,6 @@
 <template>
   <div class="py-8 md:py-12 max-w-4xl mx-auto px-4">
-    <div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 md:p-12">
+    <div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-4 md:p-12">
       <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-6">Terms of Service</h1>
       <div class="prose prose-slate prose-lg max-w-none text-slate-600">
         <p class="font-medium text-slate-500 mb-8">Last updated: {{ new Date().toLocaleDateString() }}</p>

@@ -9,7 +9,7 @@
         <div class="absolute bottom-0 right-0 w-[500px] h-[500px] bg-emerald-400/20 rounded-full blur-3xl translate-x-1/3 translate-y-1/3"></div>
       </div>
       
-      <div class="relative z-10 p-12 max-w-lg text-white">
+      <div class="relative z-10 p-6 md:p-12 max-w-lg text-white">
         <div class="mb-8 flex items-center gap-3">
           <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-emerald-600 text-2xl font-bold shadow-lg">L</div>
           <span class="text-xl md:text-3xl font-extrabold tracking-tight">Lapadia<span class="text-emerald-200">Fresh</span></span>
@@ -30,7 +30,7 @@
     </div>
 
     <!-- Right Section: Login Form -->
-    <div class="w-full lg:w-1/2 flex items-center justify-center p-4 md:p-8 sm:p-12 bg-slate-50">
+    <div class="w-full lg:w-1/2 flex items-center justify-center p-4 md:p-8 sm:p-6 md:p-12 bg-slate-50">
       <div class="max-w-md w-full space-y-8">
         <div class="text-center lg:text-left">
           <h2 class="text-xl md:text-3xl font-extrabold text-slate-900 tracking-tight">Sign in</h2>

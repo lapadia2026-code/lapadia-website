@@ -3,7 +3,7 @@
     <div class="flex flex-col md:flex-row gap-8">
       <!-- Sidebar -->
       <aside class="w-full md:w-64 shrink-0">
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 space-y-2">
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 md:p-6 space-y-2">
           <div class="pb-4 mb-4 border-b border-slate-100">
             <h2 class="font-bold text-lg text-slate-900">My Account</h2>
             <p class="text-sm text-slate-500">{{ user?.email || 'customer@lapadia.com' }}</p>
@@ -52,7 +52,7 @@
       </Teleport>
 
       <!-- Main Content -->
-      <main class="flex-1 bg-white rounded-2xl shadow-sm border border-slate-100 p-6 md:p-8">
+      <main class="flex-1 bg-white rounded-2xl shadow-sm border border-slate-100 p-4 md:p-8">
         <h1 class="text-2xl font-bold text-slate-900 mb-6">My Subscriptions</h1>
         
         <div v-if="loading" class="space-y-4">

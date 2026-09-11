@@ -9,7 +9,7 @@
       <p class="text-slate-500 mt-2 font-medium">Complete your details below to place your order.</p>
     </div>
     
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 relative">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 md:gap-20 relative">
       <!-- Checkout Form -->
       <form @submit.prevent="handleCheckout" class="lg:col-span-2 space-y-8">
         

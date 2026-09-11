@@ -7,7 +7,7 @@
     </transition>
 
     <!-- Hero Section -->
-    <section class="relative pt-24 lg:pt-32 pb-20 max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20 z-10 min-h-[800px]">
+    <section class="relative pt-24 lg:pt-32 pb-20 max-w-[1400px] mx-auto px-4 md:px-12 lg:px-20 z-10 min-h-[800px]">
       
       <div v-if="loading" class="flex items-center justify-center h-96">
         <div class="w-12 h-12 border-4 border-[#FFCD42] border-t-transparent rounded-full animate-spin"></div>
@@ -123,7 +123,7 @@
 
     <!-- Explore Products Section -->
     <section class="py-24 bg-white relative z-10 rounded-t-[3rem] shadow-[0_-20px_40px_rgba(0,0,0,0.03)] mt-12">
-      <div class="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20">
+      <div class="max-w-[1400px] mx-auto px-4 md:px-12 lg:px-20">
         <div class="flex flex-col md:flex-row items-end justify-between mb-12 gap-4">
           <div>
             <div class="text-[#FFCD42] font-black tracking-wider uppercase text-sm mb-2">Our Menu</div>

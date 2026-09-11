@@ -19,7 +19,7 @@
     </div>
 
     <!-- Content Sections -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 lg:gap-20">
       <div>
         <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-sm">🌱</div>
         <h2 class="text-xl md:text-3xl font-bold text-slate-900 mb-4">Our Mission</h2>
