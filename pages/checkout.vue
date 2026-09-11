@@ -44,9 +44,38 @@
                 <input v-model="orderData.altPhone" type="tel" class="flex-1 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all font-medium" placeholder="800 000 0000" />
               </div>
             </div>
-            <div class="md:col-span-2 space-y-2">
-              <label class="text-sm font-bold text-slate-700">Delivery Address <span class="text-rose-500">*</span></label>
-              <textarea v-model="orderData.deliveryAddress" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all font-medium resize-none" rows="3" placeholder="Enter your full delivery address..."></textarea>
+            <div class="md:col-span-2 space-y-4 border p-5 rounded-2xl bg-slate-50 border-slate-200">
+              <h3 class="text-sm font-bold text-slate-800 border-b pb-2 mb-2">Delivery Location <span class="text-rose-500">*</span></h3>
+              
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="space-y-2">
+                  <label class="text-xs font-bold text-slate-700">Country</label>
+                  <select disabled class="w-full px-4 py-3 bg-slate-100 border border-slate-200 rounded-xl outline-none font-medium text-slate-500 cursor-not-allowed">
+                    <option>Nigeria</option>
+                  </select>
+                </div>
+                <div class="space-y-2">
+                  <label class="text-xs font-bold text-slate-700">State</label>
+                  <select disabled class="w-full px-4 py-3 bg-slate-100 border border-slate-200 rounded-xl outline-none font-medium text-slate-500 cursor-not-allowed">
+                    <option>Lagos</option>
+                  </select>
+                </div>
+                <div class="space-y-2 sm:col-span-2">
+                  <label class="text-xs font-bold text-slate-700">Local Government Area (LGA) <span class="text-rose-500">*</span></label>
+                  <select v-model="orderData.lga" required class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all font-medium">
+                    <option value="" disabled selected>Select your LGA...</option>
+                    <option v-for="lga in lagosLGAs" :key="lga" :value="lga">{{ lga }}</option>
+                  </select>
+                </div>
+                <div class="space-y-2 sm:col-span-2">
+                  <label class="text-xs font-bold text-slate-700">Street Address <span class="text-rose-500">*</span></label>
+                  <input v-model="orderData.streetAddress" required type="text" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all font-medium" placeholder="e.g. 15 Awolowo Road, Ikoyi" />
+                </div>
+                <div class="space-y-2 sm:col-span-2">
+                  <label class="text-xs font-bold text-slate-700">Nearest Landmark</label>
+                  <input v-model="orderData.landmark" type="text" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all font-medium" placeholder="e.g. Opposite GTBank" />
+                </div>
+              </div>
             </div>
             
             <div class="md:col-span-2">
@@ -80,6 +109,31 @@
               <span class="text-sm text-slate-500 font-medium">Delivered within 2 hours</span>
               <span class="mt-4 text-sm font-bold text-slate-700 bg-slate-100 w-fit px-3 py-1 rounded-md">+₦{{ settings.expressDeliveryFee?.toLocaleString() || '1,500' }}</span>
             </label>
+          </div>
+
+          <!-- Scheduled Time Picker -->
+          <div class="mt-8 pt-6 border-t border-slate-100">
+            <h3 class="text-base font-bold text-slate-800 mb-2 flex items-center gap-2">
+              <svg class="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Schedule Delivery Time <span class="text-slate-400 font-normal text-sm">(Optional)</span>
+            </h3>
+            <p class="text-sm text-slate-500 mb-4">Want your smoothies at a specific time? Pick a date and time slot.</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="space-y-2">
+                <label class="text-sm font-bold text-slate-700">Date</label>
+                <input v-model="orderData.scheduledDate" type="date" :min="minScheduleDate" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all font-medium" />
+              </div>
+              <div class="space-y-2">
+                <label class="text-sm font-bold text-slate-700">Time Slot</label>
+                <select v-model="orderData.scheduledSlot" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all font-medium">
+                  <option value="">ASAP (No preference)</option>
+                  <option value="09:00">Morning (9:00 AM)</option>
+                  <option value="12:00">Noon (12:00 PM)</option>
+                  <option value="15:00">Afternoon (3:00 PM)</option>
+                  <option value="18:00">Evening (6:00 PM)</option>
+                </select>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -168,7 +222,7 @@
           
           <div v-else-if="route.query.planId && subscriptionPlan">
             <div class="mb-6">
-              <div class="flex items-center gap-3">
+              <div class="flex items-center gap-3 mb-4">
                 <div class="w-10 h-10 bg-slate-100 border border-slate-200 rounded-lg flex items-center justify-center text-sm flex-shrink-0 text-2xl">
                   🔁
                 </div>
@@ -177,6 +231,26 @@
                   <span class="text-xs text-slate-500 capitalize">{{ subscriptionPlan.frequency }} plan</span>
                 </div>
                 <div class="ml-auto font-bold text-slate-900">₦{{ subscriptionPlan.price.toLocaleString() }}</div>
+              </div>
+              
+              <!-- Plan Products List -->
+              <div v-if="checkoutPlanProducts && checkoutPlanProducts.length > 0" class="mt-4 pt-4 border-t border-slate-100">
+                <div class="flex items-center justify-between mb-3">
+                  <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Included Products</h4>
+                  <button v-if="subscriptionPlan.allowSwaps !== false && subscriptionPlan.swappableProductIds?.length > 0" @click="openSwapModal" type="button" class="text-xs font-bold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-2 py-1 rounded transition-colors">Swap</button>
+                </div>
+                <div class="space-y-3 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                  <div class="flex items-center gap-3" v-for="prod in checkoutPlanProducts" :key="prod._id">
+                    <div class="w-8 h-8 bg-slate-100 border border-slate-200 rounded-lg flex items-center justify-center text-xs flex-shrink-0">
+                      <img v-if="prod.images && prod.images[0]" :src="prod.images[0]" class="w-full h-full object-cover rounded-lg" />
+                      <span v-else>{{ prod.icon || '📦' }}</span>
+                    </div>
+                    <div>
+                      <span class="text-xs font-bold text-slate-800 block truncate w-40" :title="prod.name">{{ prod.name }}</span>
+                      <span class="text-[10px] text-slate-500">Qty: 1</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -207,6 +281,23 @@
               </div>
             </div>
             
+            <!-- Promo Code Section -->
+            <div class="border-t border-slate-100 py-6">
+              <label class="text-sm font-bold text-slate-700 block mb-2">Have a Promo Code?</label>
+              <div class="flex gap-2">
+                <input v-model="promoCodeInput" :disabled="!!appliedPromo" type="text" class="flex-1 px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all uppercase font-mono" placeholder="ENTER CODE" />
+                <button v-if="!appliedPromo" @click="applyPromo" :disabled="!promoCodeInput || validatingPromo" type="button" class="bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white px-4 py-2 rounded-lg font-bold transition-colors">
+                  {{ validatingPromo ? '...' : 'Apply' }}
+                </button>
+                <button v-else @click="removePromo" type="button" class="bg-rose-100 hover:bg-rose-200 text-rose-600 px-4 py-2 rounded-lg font-bold transition-colors">
+                  Remove
+                </button>
+              </div>
+              <p v-if="appliedPromo" class="text-emerald-600 text-sm font-medium mt-2 flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                Promo applied: {{ appliedPromo.code }}
+              </p>
+            </div>
             <div class="border-t border-slate-100 pt-6 space-y-3">
               <div class="flex justify-between text-slate-500 text-sm font-medium">
                 <span>Subtotal</span>
@@ -215,6 +306,10 @@
               <div class="flex justify-between text-slate-500 text-sm font-medium">
                 <span>Delivery Fee</span>
                 <span class="text-slate-900">{{ orderData.deliveryTime === 'express' ? `₦${settings.expressDeliveryFee?.toLocaleString() || '1,500'}` : 'Free' }}</span>
+              </div>
+              <div v-if="appliedPromo" class="flex justify-between text-emerald-600 text-sm font-bold">
+                <span>Discount ({{ appliedPromo.code }})</span>
+                <span>-₦{{ discountAmount.toLocaleString() }}</span>
               </div>
               <div class="flex justify-between text-lg font-black text-slate-900 mt-4 pt-4 border-t border-slate-100">
                 <span>Total</span>
@@ -227,6 +322,73 @@
     </div>
 
     <AuthModal :isOpen="showAuthModal" @success="handleAuthSuccess" @close="showAuthModal = false" />
+
+    <!-- Swap Products Modal -->
+    <div v-if="showSwapModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+      <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" @click="showSwapModal = false"></div>
+      <div class="bg-white rounded-3xl shadow-2xl w-full max-w-lg relative flex flex-col max-h-[90vh]">
+        <div class="p-6 border-b border-slate-100 flex items-center justify-between shrink-0">
+          <div>
+            <h3 class="text-xl font-bold text-slate-900">Customize Your Box</h3>
+            <p class="text-sm text-slate-500 mt-1">Select exactly {{ subscriptionPlan?.productIds?.length || 0 }} items for your subscription.</p>
+          </div>
+          <button @click="showSwapModal = false" class="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-500">✕</button>
+        </div>
+        
+        <div class="p-6 overflow-y-auto custom-scrollbar flex-1">
+          <div class="space-y-2">
+            <div 
+              v-for="prod in subscriptionPlan?.swappableProductIds || []" 
+              :key="prod._id"
+              @click="toggleSwapProduct(prod._id)"
+              class="flex items-center gap-4 p-3 rounded-2xl border transition-all cursor-pointer select-none"
+              :class="selectedSwapProductIds.includes(prod._id) ? 'bg-emerald-50 border-emerald-200' : 'bg-white border-slate-200 hover:border-emerald-300'"
+            >
+              <div class="w-12 h-12 rounded-xl overflow-hidden shrink-0 bg-slate-100">
+                <img v-if="prod.images?.[0]" :src="prod.images[0]" class="w-full h-full object-cover" />
+                <div v-else class="w-full h-full flex items-center justify-center text-xl">🍹</div>
+              </div>
+              <div class="flex-1">
+                <div class="font-bold text-slate-900 text-sm mb-1">{{ prod.name }}</div>
+                <div class="text-xs text-slate-500 line-clamp-1">{{ prod.description }}</div>
+              </div>
+              <div class="shrink-0">
+                <div :class="[
+                  'w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors',
+                  selectedSwapProductIds.includes(prod._id) ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-slate-300'
+                ]">
+                  <svg v-if="selectedSwapProductIds.includes(prod._id)" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-6 border-t border-slate-100 bg-slate-50 rounded-b-3xl shrink-0">
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-sm font-medium text-slate-600">Selected Items</span>
+            <span class="font-bold" :class="selectedSwapProductIds.length === (subscriptionPlan?.productIds?.length || 0) ? 'text-emerald-600' : 'text-slate-900'">
+              {{ selectedSwapProductIds.length }} / {{ subscriptionPlan?.productIds?.length || 0 }}
+            </span>
+          </div>
+          <div class="flex justify-end gap-3">
+            <button @click="showSwapModal = false" class="px-5 py-2.5 rounded-xl font-bold text-slate-600 hover:bg-slate-200 transition-colors">Cancel</button>
+            <button 
+              @click="confirmSwap"
+              :disabled="selectedSwapProductIds.length !== (subscriptionPlan?.productIds?.length || 0)"
+              :class="[
+                'px-6 py-2.5 rounded-xl font-bold text-white transition-all shadow-sm',
+                selectedSwapProductIds.length === (subscriptionPlan?.productIds?.length || 0) ? 'bg-emerald-600 hover:bg-emerald-500 hover:shadow-md' : 'bg-slate-300 cursor-not-allowed'
+              ]"
+            >
+              Confirm Selection
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -247,10 +409,60 @@ const { settings, getSettings } = useSettings();
 
 const isSubscriptionCheckout = computed(() => !!route.query.planId || orderData.value.isSubscription);
 const subscriptionPlan = ref<any>(null);
+const checkoutPlanProducts = ref<any[]>([]);
+
+const showSwapModal = ref(false);
+const selectedSwapProductIds = ref<string[]>([]);
+
+const toggleSwapProduct = (id: string) => {
+  const maxItems = subscriptionPlan.value?.productIds?.length || 1;
+  const index = selectedSwapProductIds.value.indexOf(id);
+  
+  if (index === -1) {
+    if (selectedSwapProductIds.value.length >= maxItems) {
+      showToast({ title: 'Limit Reached', message: `You can only select up to ${maxItems} items for this plan.`, type: 'warning' });
+      return;
+    }
+    selectedSwapProductIds.value.push(id);
+  } else {
+    selectedSwapProductIds.value.splice(index, 1);
+  }
+};
+
+const openSwapModal = () => {
+  selectedSwapProductIds.value = checkoutPlanProducts.value.map((p: any) => p._id);
+  showSwapModal.value = true;
+};
+
+const confirmSwap = () => {
+  const maxItems = subscriptionPlan.value?.productIds?.length || 1;
+  if (selectedSwapProductIds.value.length !== maxItems) {
+    showToast({ title: 'Incomplete', message: `Please select exactly ${maxItems} items.`, type: 'warning' });
+    return;
+  }
+  
+  checkoutPlanProducts.value = (subscriptionPlan.value?.swappableProductIds || []).filter(
+    (p: any) => selectedSwapProductIds.value.includes(p._id)
+  );
+  
+  showSwapModal.value = false;
+  showToast({ title: 'Success', message: 'Your box has been customized.', type: 'success' });
+};
 
 const isAuthenticated = ref(false);
 const showAuthModal = ref(false);
 const isFrequencyDropdownOpen = ref(false);
+
+const promoCodeInput = ref('');
+const appliedPromo = ref<any>(null);
+const validatingPromo = ref(false);
+
+const lagosLGAs = [
+  'Agege', 'Ajeromi-Ifelodun', 'Alimosho', 'Amuwo-Odofin', 'Apapa',
+  'Badagry', 'Epe', 'Eti-Osa', 'Ibeju-Lekki', 'Ifako-Ijaiye', 'Ikeja',
+  'Ikorodu', 'Kosofe', 'Lagos Island', 'Lagos Mainland', 'Mushin',
+  'Ojo', 'Oshodi-Isolo', 'Shomolu', 'Surulere'
+];
 
 const orderData = ref({
   fullName: '',
@@ -259,12 +471,21 @@ const orderData = ref({
   phone: '',
   altPhoneCode: '+234',
   altPhone: '',
-  deliveryAddress: '',
+  lga: '',
+  streetAddress: '',
+  landmark: '',
   deliveryTime: 'standard',
+  scheduledDate: '',
+  scheduledSlot: '',
   saveCard: false,
   saveDeliveryOptions: false,
   isSubscription: false,
   subscriptionFrequency: 'weekly'
+});
+
+const minScheduleDate = computed(() => {
+  const today = new Date();
+  return today.toISOString().split('T')[0];
 });
 
 const isFormValid = computed(() => {
@@ -272,7 +493,8 @@ const isFormValid = computed(() => {
     orderData.value.fullName.trim() !== '' &&
     orderData.value.email.trim() !== '' &&
     orderData.value.phone.trim().length >= 7 &&
-    orderData.value.deliveryAddress.trim() !== ''
+    orderData.value.lga !== '' &&
+    orderData.value.streetAddress.trim() !== ''
   );
 });
 
@@ -282,8 +504,21 @@ onMounted(async () => {
   if (isSubscriptionCheckout.value) {
     try {
       // Fetch all plans and find the one requested (since we didn't add a single GET /plans/:id route)
-      const res = await GATEWAY_ENDPOINT.get('/subscriptions/plans');
-      subscriptionPlan.value = res.data.find((p: any) => p._id === route.query.planId);
+      const { data } = await GATEWAY_ENDPOINT.get(`/subscriptions/plans`);
+      const plan = data.find((p: any) => p._id === route.query.planId);
+      if (plan) {
+        subscriptionPlan.value = plan;
+        orderData.value.isSubscription = true;
+        orderData.value.subscriptionFrequency = plan.frequency;
+        
+        // Initialize checkout products with the default plan products
+        checkoutPlanProducts.value = plan.productIds ? [...plan.productIds] : [];
+        
+        // If swappableProductIds is missing/empty but plan products exist, use plan products as the default swappable pool
+        if (!plan.swappableProductIds || plan.swappableProductIds.length === 0) {
+          plan.swappableProductIds = plan.productIds ? [...plan.productIds] : [];
+        }
+      }
     } catch (e) {
       console.error(e);
     }
@@ -313,9 +548,39 @@ const handleAuthSuccess = (user: any) => {
   showToast({ title: 'Success', message: 'You have been securely signed in.', type: 'success' });
 };
 
+const applyPromo = async () => {
+  if (!promoCodeInput.value) return;
+  validatingPromo.value = true;
+  try {
+    const res = await GATEWAY_ENDPOINT.get(`/promos/validate/${promoCodeInput.value}`);
+    appliedPromo.value = res.data;
+    showToast({ title: 'Promo Applied!', message: 'Your discount has been applied.', type: 'success' });
+  } catch (error: any) {
+    showToast({ title: 'Invalid Promo', message: error.response?.data?.message || 'Code invalid or expired', type: 'error' });
+    promoCodeInput.value = '';
+  } finally {
+    validatingPromo.value = false;
+  }
+};
+
+const removePromo = () => {
+  appliedPromo.value = null;
+  promoCodeInput.value = '';
+};
+
+const discountAmount = computed(() => {
+  if (!appliedPromo.value) return 0;
+  let baseTotal = isSubscriptionCheckout.value && subscriptionPlan.value ? subscriptionPlan.value.price : cartTotal.value;
+  if (appliedPromo.value.discountType === 'percentage') {
+    return (baseTotal * appliedPromo.value.discountValue) / 100;
+  }
+  return appliedPromo.value.discountValue;
+});
+
 const finalTotal = computed(() => {
   let baseTotal = isSubscriptionCheckout.value && subscriptionPlan.value ? subscriptionPlan.value.price : cartTotal.value;
-  return orderData.value.deliveryTime === 'express' ? baseTotal + (settings.value.expressDeliveryFee || 1500) : baseTotal;
+  let totalWithDelivery = orderData.value.deliveryTime === 'express' ? baseTotal + (settings.value.expressDeliveryFee || 1500) : baseTotal;
+  return Math.max(0, totalWithDelivery - discountAmount.value);
 });
 
 const handleCheckout = async () => {
@@ -324,19 +589,35 @@ const handleCheckout = async () => {
     return;
   }
 
+  let scheduledTime = null;
+  if (orderData.value.scheduledDate && orderData.value.scheduledSlot) {
+    scheduledTime = new Date(`${orderData.value.scheduledDate}T${orderData.value.scheduledSlot}`);
+  }
+
+  const fullAddress = `${orderData.value.streetAddress}, ${orderData.value.lga}, Lagos, Nigeria.` + (orderData.value.landmark ? ` Landmark: ${orderData.value.landmark}` : '');
+
   const payload = {
     ...orderData.value,
+    deliveryAddress: fullAddress,
     phone: `${orderData.value.phoneCode}${orderData.value.phone}`,
     altPhone: orderData.value.altPhone ? `${orderData.value.altPhoneCode}${orderData.value.altPhone}` : '',
     totalAmount: finalTotal.value,
-    items: (isSubscriptionCheckout.value && route.query.planId) ? [] : cart.value.map(item => ({
-      productId: item.product._id,
-      quantity: item.quantity,
-      priceAtPurchase: item.product.price
-    })),
+    items: (isSubscriptionCheckout.value && route.query.planId && checkoutPlanProducts.value.length > 0) 
+      ? checkoutPlanProducts.value.map((p: any) => ({
+          productId: p._id,
+          quantity: 1,
+          priceAtPurchase: p.price || 0
+        }))
+      : cart.value.map(item => ({
+          productId: item.product._id,
+          quantity: item.quantity,
+          priceAtPurchase: item.product.price
+        })),
     isSubscription: isSubscriptionCheckout.value,
     subscriptionFrequency: route.query.planId ? undefined : orderData.value.subscriptionFrequency,
-    planId: route.query.planId ? route.query.planId : undefined
+    planId: route.query.planId ? route.query.planId : undefined,
+    promoCode: appliedPromo.value ? appliedPromo.value.code : undefined,
+    scheduledTime
   };
 
   try {

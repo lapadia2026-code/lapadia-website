@@ -76,6 +76,8 @@
             <h4 class="text-white font-bold mb-6 uppercase tracking-wider text-sm">Company</h4>
             <ul class="space-y-4 text-slate-400">
               <li><NuxtLink to="/about" class="hover:text-blue-400 transition-colors font-medium">About Us</NuxtLink></li>
+              <li><NuxtLink to="/blog" class="hover:text-blue-400 transition-colors font-medium">Blog</NuxtLink></li>
+              <li><NuxtLink to="/events" class="hover:text-blue-400 transition-colors font-medium">Events</NuxtLink></li>
               <li><NuxtLink to="/contact" class="hover:text-blue-400 transition-colors font-medium">Contact Support</NuxtLink></li>
               <li><NuxtLink to="/faq" class="hover:text-blue-400 transition-colors font-medium">FAQ</NuxtLink></li>
             </ul>

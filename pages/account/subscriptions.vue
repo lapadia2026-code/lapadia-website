@@ -105,16 +105,101 @@
               </ul>
             </div>
 
-            <div class="flex justify-end border-t border-slate-100 pt-4" v-if="sub.status === 'active'">
-              <button @click="cancelSubscription(sub._id)" :disabled="actionLoading === sub._id" class="px-4 py-2 text-sm font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-lg transition-colors disabled:opacity-50 flex items-center gap-2">
-                <span v-if="actionLoading === sub._id" class="w-4 h-4 border-2 border-rose-300 border-t-rose-600 rounded-full animate-spin"></span>
-                Cancel Subscription
+            <div class="flex justify-end gap-3 border-t border-slate-100 pt-4" v-if="sub.status === 'active'">
+              <button v-if="sub.planId?.allowSwaps !== false && getSwappableProducts(sub).length > 0" @click="openSwapModal(sub)" class="px-4 py-2 text-sm font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors flex items-center gap-2">
+                Swap Products
+              </button>
+              <button @click="openCancelModal(sub)" class="px-4 py-2 text-sm font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-lg transition-colors">
+                Cancel
               </button>
             </div>
           </div>
         </div>
       </main>
     </div>
+
+    <!-- Swap Products Modal -->
+    <Teleport to="body">
+      <Transition name="modal">
+        <div v-if="showSwapModal" class="fixed inset-0 z-[200] flex items-center justify-center p-4">
+          <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" @click="showSwapModal = false"></div>
+          <div class="relative bg-white rounded-2xl shadow-2xl border border-slate-100 max-w-lg w-full flex flex-col max-h-[90vh]">
+            <div class="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50 rounded-t-2xl">
+              <h2 class="text-xl font-bold text-slate-900">Swap Products</h2>
+              <button @click="showSwapModal = false" class="p-2 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-200 transition-colors">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+              </button>
+            </div>
+            
+            <div class="p-6 overflow-y-auto flex-1 bg-slate-50/50">
+              <p class="text-sm text-slate-500 mb-4">Select the products you'd like to receive in your upcoming deliveries.</p>
+              
+              <div v-if="swapAvailableProducts.length > 0" class="space-y-3">
+                <label v-for="prod in swapAvailableProducts" :key="prod._id" class="flex items-center gap-4 p-3 border border-slate-200 rounded-xl bg-white cursor-pointer hover:border-blue-300 transition-colors" :class="{ 'border-blue-500 ring-1 ring-blue-500': selectedSwapProductIds.includes(prod._id) }">
+                  <input type="checkbox" :value="prod._id" v-model="selectedSwapProductIds" class="w-5 h-5 text-blue-600 rounded border-slate-300 focus:ring-blue-500" />
+                  <div class="flex-1 flex items-center gap-3">
+                    <img v-if="prod.images?.[0]" :src="prod.images[0]" class="w-10 h-10 rounded-lg object-cover bg-slate-100" />
+                    <div v-else class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-xl">{{ prod.icon || '📦' }}</div>
+                    <div>
+                      <h4 class="font-bold text-slate-900 text-sm">{{ prod.name }}</h4>
+                      <p class="text-xs text-slate-500">₦{{ prod.price?.toLocaleString() }}</p>
+                    </div>
+                  </div>
+                </label>
+              </div>
+              <div v-else class="text-center py-8">
+                <div class="text-3xl mb-3">📦</div>
+                <p class="text-slate-500 text-sm">No swappable products available for this plan.</p>
+              </div>
+            </div>
+
+            <div class="p-6 border-t border-slate-100 flex justify-end gap-3 bg-white rounded-b-2xl">
+              <button type="button" @click="showSwapModal = false" class="px-5 py-2.5 text-slate-600 font-medium hover:bg-slate-100 rounded-xl transition-colors">Cancel</button>
+              <button type="button" @click="confirmSwap" :disabled="isSwapping || selectedSwapProductIds.length === 0" class="px-5 py-2.5 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/30 flex items-center gap-2 disabled:opacity-50">
+                <span v-if="isSwapping" class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                Save Changes
+              </button>
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
+
+    <!-- Cancel Subscription Modal -->
+    <Teleport to="body">
+      <Transition name="modal">
+        <div v-if="showCancelModal" class="fixed inset-0 z-[200] flex items-center justify-center p-4">
+          <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" @click="showCancelModal = false"></div>
+          <div class="relative bg-white rounded-2xl shadow-2xl border border-slate-100 max-w-sm w-full flex flex-col">
+            <div class="p-6 text-center">
+              <div class="w-16 h-16 rounded-full bg-rose-100 flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+              </div>
+              <h3 class="text-xl font-bold text-slate-900 mb-2">Cancel Subscription?</h3>
+              <p class="text-slate-500 text-sm mb-6">Are you sure you want to cancel this subscription? You will not receive any further deliveries.</p>
+              
+              <div class="text-left mb-6">
+                <label class="block text-sm font-semibold text-slate-700 mb-2">Reason for cancellation (optional)</label>
+                <textarea v-model="cancelReason" rows="3" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 outline-none transition-all text-sm" placeholder="Tell us why you are leaving..."></textarea>
+              </div>
+
+              <div class="flex gap-3">
+                <button type="button" @click="showCancelModal = false" class="flex-1 px-5 py-3 rounded-xl font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors">
+                  Keep It
+                </button>
+                <button type="button" @click="confirmCancelSubscription" :disabled="isCancelling" class="flex-1 px-5 py-3 rounded-xl font-bold text-white bg-rose-500 hover:bg-rose-600 transition-colors shadow-lg shadow-rose-500/25 flex justify-center items-center gap-2 disabled:opacity-50">
+                  <span v-if="isCancelling" class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                  Yes, Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
+
   </div>
 </template>
 
@@ -143,18 +228,86 @@ const fetchSubscriptions = async () => {
   }
 };
 
-const cancelSubscription = async (id: string) => {
-  if (!confirm('Are you sure you want to cancel this subscription? You will not receive any further deliveries after your current cycle.')) return;
+const showCancelModal = ref(false);
+const subToCancel = ref<any>(null);
+const cancelReason = ref('');
+const isCancelling = ref(false);
+
+const openCancelModal = (sub: any) => {
+  subToCancel.value = sub;
+  cancelReason.value = '';
+  showCancelModal.value = true;
+};
+
+const confirmCancelSubscription = async () => {
+  if (!subToCancel.value) return;
   
-  actionLoading.value = id;
+  isCancelling.value = true;
   try {
-    await GATEWAY_ENDPOINT_WITH_AUTH.put(`/subscriptions/user/${id}/cancel`);
+    await GATEWAY_ENDPOINT_WITH_AUTH.put(`/subscriptions/user/${subToCancel.value._id}/cancel`, {
+      reason: cancelReason.value
+    });
     showToast({ title: 'Success', message: 'Subscription has been cancelled.', type: 'success' });
+    showCancelModal.value = false;
     await fetchSubscriptions();
   } catch (error: any) {
     showToast({ title: 'Error', message: error.response?.data?.message || 'Failed to cancel subscription.', type: 'error' });
   } finally {
-    actionLoading.value = null;
+    isCancelling.value = false;
+  }
+};
+
+const showSwapModal = ref(false);
+const currentSwapSub = ref<any>(null);
+const selectedSwapProductIds = ref<string[]>([]);
+const isSwapping = ref(false);
+
+const getSwappableProducts = (sub: any) => {
+  if (!sub || !sub.planId) return [];
+  // Use swappableProductIds if available, otherwise fallback to productIds
+  return sub.planId.swappableProductIds?.length > 0 ? sub.planId.swappableProductIds : (sub.planId.productIds || []);
+};
+
+const swapAvailableProducts = computed(() => {
+  if (!currentSwapSub.value) return [];
+  return getSwappableProducts(currentSwapSub.value);
+});
+
+const openSwapModal = (sub: any) => {
+  currentSwapSub.value = sub;
+  // Pre-select currently active items
+  selectedSwapProductIds.value = sub.items.map((item: any) => item.productId?._id || item.productId).filter(Boolean);
+  showSwapModal.value = true;
+};
+
+const confirmSwap = async () => {
+  if (!currentSwapSub.value || selectedSwapProductIds.value.length === 0) return;
+  
+  isSwapping.value = true;
+  try {
+    const planProducts = swapAvailableProducts.value;
+    
+    // Map selected IDs to item objects
+    const newItems = selectedSwapProductIds.value.map(id => {
+      const prodDetails = planProducts.find((p: any) => p._id === id);
+      return {
+        productId: id,
+        quantity: 1,
+        priceAtPurchase: prodDetails ? prodDetails.price : 0
+      };
+    });
+
+    await GATEWAY_ENDPOINT_WITH_AUTH.put(`/subscriptions/user/${currentSwapSub.value._id}/swap`, {
+      items: newItems
+    });
+    
+    showToast({ title: 'Success', message: 'Subscription products updated successfully.', type: 'success' });
+    showSwapModal.value = false;
+    await fetchSubscriptions();
+  } catch (error: any) {
+    showToast({ title: 'Error', message: error.response?.data?.message || 'Failed to update products.', type: 'error' });
+  } finally {
+    isSwapping.value = false;
   }
 };
 

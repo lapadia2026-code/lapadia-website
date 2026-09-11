@@ -21,7 +21,7 @@
         </div>
       </div>
 
-      <div v-else-if="plans.length > 0" class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto py-10">
+      <div v-else-if="plans.length > 0" class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto py-10">
         <div 
           v-for="(plan, index) in plans" 
           :key="plan._id" 
@@ -42,6 +42,37 @@
               <span :class="[plan.isPopular ? 'text-slate-400' : 'text-slate-500', 'font-medium lowercase']">/{{ plan.frequency }}</span>
             </div>
             <p :class="[plan.isPopular ? 'text-slate-400' : 'text-slate-500', 'mt-4 text-sm leading-relaxed']">{{ plan.description }}</p>
+          </div>
+
+          <!-- Linked Products -->
+          <div v-if="getLinkedProducts(plan).length > 0" class="mb-6 relative">
+            <p :class="[plan.isPopular ? 'text-slate-500' : 'text-slate-400', 'text-xs font-bold uppercase tracking-wider mb-3']">What's Included</p>
+            <div class="space-y-2 max-h-44 overflow-y-auto pr-1 custom-scrollbar">
+              <div 
+                v-for="prod in getLinkedProducts(plan)" 
+                :key="prod._id"
+                :class="[
+                  'flex items-center gap-3 p-2 rounded-xl border',
+                  plan.isPopular ? 'bg-white/5 border-white/10' : 'bg-slate-50 border-slate-100'
+                ]"
+              >
+                <img 
+                  v-if="prod.images?.[0]" 
+                  :src="prod.images[0]" 
+                  :alt="prod.name"
+                  class="w-10 h-10 rounded-lg object-cover flex-shrink-0"
+                />
+                <div v-else :class="['w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0', plan.isPopular ? 'bg-white/10' : 'bg-slate-200']">
+                  <span class="text-lg">🍹</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div :class="[plan.isPopular ? 'text-white' : 'text-slate-800', 'text-sm font-semibold truncate']">{{ prod.name }}</div>
+                  <div :class="[plan.isPopular ? 'text-slate-400' : 'text-slate-400', 'text-xs']">₦{{ prod.price?.toLocaleString() }}</div>
+                </div>
+              </div>
+            </div>
+            <!-- Fade out effect at the bottom for long lists -->
+            <div v-if="getLinkedProducts(plan).length > 3" :class="[plan.isPopular ? 'from-slate-900' : 'from-white', 'absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t to-transparent pointer-events-none']"></div>
           </div>
           
           <ul class="space-y-4 mb-8 flex-1">
@@ -90,7 +121,33 @@ onMounted(async () => {
   }
 });
 
+const getLinkedProducts = (plan: any) => {
+  // Prefer new productIds array, fallback to legacy single productId
+  if (plan.productIds && plan.productIds.length > 0) {
+    return plan.productIds.filter((p: any) => p && p._id);
+  }
+  if (plan.productId && plan.productId._id) {
+    return [plan.productId];
+  }
+  return [];
+};
+
 const selectPlan = (plan: any) => {
   router.push(`/checkout?planId=${plan._id}`);
 };
 </script>
+
+<style scoped>
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-slate-200 rounded-full;
+}
+.bg-slate-900 .custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-slate-700;
+}
+</style>
