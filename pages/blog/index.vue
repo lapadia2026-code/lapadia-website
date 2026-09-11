@@ -23,8 +23,8 @@
       </div>
 
       <div v-else-if="blogs.length === 0" class="text-center py-24">
-        <div class="text-6xl mb-4">📝</div>
-        <h2 class="text-3xl font-black text-slate-900 mb-3" style="font-family: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;">Coming Soon</h2>
+        <div class="text-3xl md:text-6xl mb-4">📝</div>
+        <h2 class="text-xl md:text-3xl font-black text-slate-900 mb-3" >Coming Soon</h2>
         <p class="text-slate-500 font-medium max-w-md mx-auto">We're brewing up some amazing content. Check back soon for health tips, recipes, and stories from our kitchen.</p>
       </div>
 
@@ -43,7 +43,7 @@
               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             />
             <div v-else class="w-full h-full bg-gradient-to-br from-emerald-100 to-teal-50 flex items-center justify-center">
-              <span class="text-5xl">🍹</span>
+              <span class="text-3xl md:text-5xl">🍹</span>
             </div>
           </div>
 
@@ -56,7 +56,7 @@
             </span>
           </div>
 
-          <h2 class="text-xl font-black text-slate-900 group-hover:text-emerald-700 transition-colors line-clamp-2 mb-2" style="font-family: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;">
+          <h2 class="text-xl font-black text-slate-900 group-hover:text-emerald-700 transition-colors line-clamp-2 mb-2" >
             {{ blog.title }}
           </h2>
 

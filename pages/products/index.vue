@@ -1,7 +1,7 @@
 <template>
   <div class="py-6 md:py-10 pb-16 max-w-7xl mx-auto px-4">
     <div class="mb-12">
-      <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight mb-4">All Products</h1>
+      <h1 class="text-2xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">All Products</h1>
       <p class="text-lg text-slate-500 max-w-2xl">Browse our entire catalog of fresh groceries, pantry staples, and household items. Add directly to your cart or subscribe for recurring delivery.</p>
     </div>
 
@@ -36,7 +36,7 @@
           </button>
 
           <NuxtLink :to="`/products/${product._id || product.id}`" class="block">
-            <div class="relative w-full h-48 bg-slate-100 rounded-2xl mb-4 overflow-hidden flex items-center justify-center text-4xl">
+            <div class="relative w-full h-48 bg-slate-100 rounded-2xl mb-4 overflow-hidden flex items-center justify-center text-2xl md:text-4xl">
               <img v-if="product.imageUrl" :src="product.imageUrl" :alt="product.name" class="w-full h-full object-cover" />
               <span v-else>{{ product.icon || '📦' }}</span>
             </div>

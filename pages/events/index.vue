@@ -10,7 +10,7 @@
         <div class="inline-block bg-white/20 backdrop-blur-sm rounded-full px-4 py-1.5 text-sm font-bold mb-4 tracking-wide">
           🎉 Community & Culture
         </div>
-        <h1 class="text-5xl md:text-7xl font-black tracking-tight mb-4" style="font-family: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;">
+        <h1 class="text-xl md:text-3xl md:text-6xl font-black tracking-tight mb-4" >
           Events
         </h1>
         <p class="text-xl text-orange-100 max-w-xl font-medium leading-relaxed">
@@ -27,10 +27,7 @@
           v-for="tab in tabs" 
           :key="tab.value"
           @click="activeTab = tab.value"
-          :class="[
-            'px-5 py-2 rounded-full text-sm font-bold transition-all border',
-            activeTab === tab.value ? 'bg-slate-900 text-white border-slate-900 shadow-lg' : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
-          ]"
+          :class="[ 'px-5 py-2 rounded-full text-sm font-bold transition-all border', activeTab === tab.value ? 'bg-slate-900 text-white border-slate-900 shadow-lg' : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300' ]"
         >
           {{ tab.label }}
         </button>
@@ -48,8 +45,8 @@
       </div>
 
       <div v-else-if="filteredEvents.length === 0" class="text-center py-24">
-        <div class="text-6xl mb-4">🗓️</div>
-        <h2 class="text-3xl font-black text-slate-900 mb-3" style="font-family: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;">No Events Yet</h2>
+        <div class="text-3xl md:text-6xl mb-4">🗓️</div>
+        <h2 class="text-xl md:text-3xl font-black text-slate-900 mb-3" >No Events Yet</h2>
         <p class="text-slate-500 font-medium max-w-md mx-auto">We're planning something exciting. Stay tuned for upcoming events and community gatherings!</p>
       </div>
 
@@ -69,7 +66,7 @@
               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             />
             <div v-else class="w-full h-full bg-gradient-to-br from-amber-100 to-orange-50 flex flex-col items-center justify-center">
-              <div class="text-4xl font-black text-amber-600">{{ getDay(event.date) }}</div>
+              <div class="text-2xl md:text-4xl font-black text-amber-600">{{ getDay(event.date) }}</div>
               <div class="text-sm font-bold text-amber-500 uppercase tracking-widest">{{ getMonth(event.date) }}</div>
             </div>
           </div>
@@ -77,16 +74,12 @@
           <!-- Event Details -->
           <div class="flex-1 py-6 pr-6 pl-6 md:pl-0">
             <div class="flex items-center gap-3 mb-3">
-              <span :class="[
-                'px-3 py-1 rounded-full text-xs font-bold border capitalize',
-                event.status === 'upcoming' ? 'bg-blue-50 text-blue-700 border-blue-200' :
-                event.status === 'ongoing' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-slate-100 text-slate-500 border-slate-200'
-              ]">
+              <span :class="[ 'px-3 py-1 rounded-full text-xs font-bold border capitalize', event.status === 'upcoming' ? 'bg-blue-50 text-blue-700 border-blue-200' : event.status === 'ongoing' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-slate-100 text-slate-500 border-slate-200' ]">
                 {{ event.status }}
               </span>
             </div>
 
-            <h2 class="text-2xl font-black text-slate-900 group-hover:text-amber-700 transition-colors mb-2" style="font-family: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;">
+            <h2 class="text-2xl font-black text-slate-900 group-hover:text-amber-700 transition-colors mb-2" >
               {{ event.title }}
             </h2>
 

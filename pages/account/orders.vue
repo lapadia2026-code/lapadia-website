@@ -76,10 +76,7 @@
               </div>
               <div>
                 <p class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Status</p>
-                <span :class="[
-                  'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border mt-1',
-                  order.paymentStatus === 'paid' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-amber-50 text-amber-700 border-amber-200'
-                ]">
+                <span :class="[ 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border mt-1', order.paymentStatus === 'paid' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-amber-50 text-amber-700 border-amber-200' ]">
                   {{ order.paymentStatus }}
                 </span>
               </div>
@@ -106,7 +103,7 @@
         </div>
         
         <div v-else class="text-center py-12">
-          <div class="text-4xl mb-4">🛒</div>
+          <div class="text-2xl md:text-4xl mb-4">🛒</div>
           <h3 class="text-lg font-bold text-slate-900 mb-2">No orders yet</h3>
           <p class="text-slate-500 mb-6">Looks like you haven't placed any orders yet.</p>
           <NuxtLink to="/products" class="px-6 py-2.5 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-colors">

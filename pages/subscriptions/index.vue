@@ -2,7 +2,7 @@
   <div class="py-6 md:py-10 pb-16 bg-slate-50 min-h-screen">
     <div class="max-w-7xl mx-auto px-4 text-center">
       <div class="mb-16">
-        <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">Never run out of essentials.</h1>
+        <h1 class="text-2xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-6">Never run out of essentials.</h1>
         <p class="text-xl text-slate-500 max-w-2xl mx-auto">Choose a plan that fits your household. We'll automatically deliver your groceries exactly when you need them.</p>
       </div>
 
@@ -25,11 +25,7 @@
         <div 
           v-for="(plan, index) in plans" 
           :key="plan._id" 
-          :class="[
-            plan.isPopular 
-              ? 'bg-slate-900 rounded-3xl p-4 md:p-8 shadow-2xl flex flex-col text-left relative transform md:-translate-y-4' 
-              : 'bg-white rounded-3xl p-4 md:p-8 border border-slate-100 shadow-sm flex flex-col text-left'
-          ]"
+          :class="[ plan.isPopular ? 'bg-slate-900 rounded-3xl p-4 md:p-8 shadow-2xl flex flex-col text-left relative transform md:-translate-y-4' : 'bg-white rounded-3xl p-4 md:p-8 border border-slate-100 shadow-sm flex flex-col text-left' ]"
         >
           <div v-if="plan.isPopular" class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-blue-600 text-white px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-md">
             Most Popular
@@ -38,7 +34,7 @@
           <div class="mb-8">
             <span :class="[plan.isPopular ? 'text-blue-400' : 'text-blue-600', 'font-bold tracking-wider uppercase text-sm mb-2 block']">{{ plan.name }}</span>
             <div class="flex items-baseline gap-1">
-              <span :class="[plan.isPopular ? 'text-white' : 'text-slate-900', 'text-4xl font-extrabold tracking-tight']">₦{{ plan.price?.toLocaleString() }}</span>
+              <span :class="[plan.isPopular ? 'text-white' : 'text-slate-900', 'text-2xl md:text-4xl font-extrabold tracking-tight']">₦{{ plan.price?.toLocaleString() }}</span>
               <span :class="[plan.isPopular ? 'text-slate-400' : 'text-slate-500', 'font-medium lowercase']">/{{ plan.frequency }}</span>
             </div>
             <p :class="[plan.isPopular ? 'text-slate-400' : 'text-slate-500', 'mt-4 text-sm leading-relaxed']">{{ plan.description }}</p>
@@ -51,10 +47,7 @@
               <div 
                 v-for="prod in getLinkedProducts(plan)" 
                 :key="prod._id"
-                :class="[
-                  'flex items-center gap-3 p-2 rounded-xl border',
-                  plan.isPopular ? 'bg-white/5 border-white/10' : 'bg-slate-50 border-slate-100'
-                ]"
+                :class="[ 'flex items-center gap-3 p-2 rounded-xl border', plan.isPopular ? 'bg-white/5 border-white/10' : 'bg-slate-50 border-slate-100' ]"
               >
                 <img 
                   v-if="prod.images?.[0]" 
@@ -82,18 +75,14 @@
             </li>
           </ul>
           
-          <button @click="selectPlan(plan)" :class="[
-            plan.isPopular 
-              ? 'w-full py-4 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-500 transition-colors shadow-lg shadow-blue-900/50' 
-              : 'w-full py-4 rounded-xl bg-slate-100 text-slate-900 font-bold hover:bg-slate-200 transition-colors'
-          ]">
+          <button @click="selectPlan(plan)" :class="[ plan.isPopular ? 'w-full py-4 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-500 transition-colors shadow-lg shadow-blue-900/50' : 'w-full py-4 rounded-xl bg-slate-100 text-slate-900 font-bold hover:bg-slate-200 transition-colors' ]">
             Select Plan
           </button>
         </div>
       </div>
       
       <div v-else class="text-center py-24 bg-white rounded-3xl border border-slate-100 max-w-3xl mx-auto shadow-sm">
-        <div class="text-6xl mb-6">📦</div>
+        <div class="text-3xl md:text-6xl mb-6">📦</div>
         <h3 class="text-2xl font-bold text-slate-900 mb-2">No Plans Available</h3>
         <p class="text-slate-500">We're currently updating our subscription offerings. Check back soon!</p>
       </div>

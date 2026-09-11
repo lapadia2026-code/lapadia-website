@@ -60,7 +60,7 @@
         </div>
 
         <div v-else-if="subscriptions.length === 0" class="text-center py-12">
-          <div class="text-4xl mb-4">🔁</div>
+          <div class="text-2xl md:text-4xl mb-4">🔁</div>
           <h3 class="text-lg font-bold text-slate-900 mb-2">No active subscriptions</h3>
           <p class="text-slate-500 mb-6">You are not subscribed to any recurring deliveries yet.</p>
           <NuxtLink to="/subscriptions" class="px-6 py-2.5 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-colors">
@@ -148,7 +148,7 @@
                 </label>
               </div>
               <div v-else class="text-center py-8">
-                <div class="text-3xl mb-3">📦</div>
+                <div class="text-xl md:text-3xl mb-3">📦</div>
                 <p class="text-slate-500 text-sm">No swappable products available for this plan.</p>
               </div>
             </div>

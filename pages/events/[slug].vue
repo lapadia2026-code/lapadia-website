@@ -19,7 +19,7 @@
       </div>
       <div v-else class="w-full h-64 bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">
         <div class="text-center text-white">
-          <div class="text-6xl font-black">{{ getDay(event.date) }}</div>
+          <div class="text-3xl md:text-6xl font-black">{{ getDay(event.date) }}</div>
           <div class="text-xl font-bold uppercase tracking-widest">{{ getMonth(event.date) }}</div>
         </div>
       </div>
@@ -30,15 +30,11 @@
           Back to Events
         </NuxtLink>
 
-        <span :class="[
-          'px-4 py-1.5 rounded-full text-xs font-bold border capitalize inline-block mb-4',
-          event.status === 'upcoming' ? 'bg-blue-50 text-blue-700 border-blue-200' :
-          event.status === 'ongoing' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-slate-100 text-slate-500 border-slate-200'
-        ]">
+        <span :class="[ 'px-4 py-1.5 rounded-full text-xs font-bold border capitalize inline-block mb-4', event.status === 'upcoming' ? 'bg-blue-50 text-blue-700 border-blue-200' : event.status === 'ongoing' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-slate-100 text-slate-500 border-slate-200' ]">
           {{ event.status }}
         </span>
 
-        <h1 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tight mb-8 leading-[1.1]" style="font-family: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;">
+        <h1 class="text-2xl md:text-4xl font-black text-slate-900 tracking-tight mb-8 leading-[1.1]" >
           {{ event.title }}
         </h1>
 
@@ -68,7 +64,7 @@
 
     <!-- Not Found -->
     <div v-else class="text-center py-24 max-w-3xl mx-auto px-6">
-      <h2 class="text-3xl font-black text-slate-900 mb-4" style="font-family: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;">Event Not Found</h2>
+      <h2 class="text-xl md:text-3xl font-black text-slate-900 mb-4" >Event Not Found</h2>
       <p class="text-slate-500 mb-8 font-medium">This event might have been removed or doesn't exist.</p>
       <NuxtLink to="/events" class="px-8 py-3 bg-slate-900 text-white font-bold rounded-xl shadow-lg hover:bg-slate-800 transition-colors">Return to Events</NuxtLink>
     </div>

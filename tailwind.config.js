@@ -4,8 +4,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['"Open Sans"', 'sans-serif'],
-        heading: ['Roboto', 'sans-serif'],
+        sans: ['Outfit', 'sans-serif'],
+        heading: ['Outfit', 'sans-serif'],
       },
       colors: {
         blue: {

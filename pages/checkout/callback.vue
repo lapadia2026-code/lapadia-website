@@ -8,10 +8,10 @@
     </div>
     
     <div v-else-if="success" class="bg-white p-12 rounded-3xl border border-slate-100 shadow-xl text-center">
-      <div class="w-24 h-24 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-4xl mx-auto mb-6">
+      <div class="w-24 h-24 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-2xl md:text-4xl mx-auto mb-6">
         <svg class="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
       </div>
-      <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight mb-4">Payment Successful!</h1>
+      <h1 class="text-2xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">Payment Successful!</h1>
       <p class="text-lg text-slate-500 mb-8">Your order has been confirmed and is now being processed. You will receive an email confirmation shortly.</p>
       <NuxtLink to="/products" class="inline-block px-4 md:px-8 py-4 bg-slate-900 text-white rounded-full font-bold shadow-xl hover:bg-slate-800 transition-colors">
         Continue Shopping
@@ -19,10 +19,10 @@
     </div>
 
     <div v-else class="bg-white p-12 rounded-3xl border border-rose-100 shadow-xl text-center">
-      <div class="w-24 h-24 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center text-4xl mx-auto mb-6">
+      <div class="w-24 h-24 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center text-2xl md:text-4xl mx-auto mb-6">
         <svg class="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>
       </div>
-      <h1 class="text-3xl font-bold text-slate-900 tracking-tight mb-4">Payment Verification Failed</h1>
+      <h1 class="text-xl md:text-3xl font-bold text-slate-900 tracking-tight mb-4">Payment Verification Failed</h1>
       <p class="text-slate-500 mb-8">We could not verify your payment. If you were charged, please contact support.</p>
       <NuxtLink to="/cart" class="inline-block px-4 md:px-8 py-4 bg-slate-900 text-white rounded-full font-bold shadow-xl hover:bg-slate-800 transition-colors">
         Return to Cart

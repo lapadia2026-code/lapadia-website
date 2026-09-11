@@ -2,7 +2,7 @@
   <div class="py-8 md:py-12 max-w-5xl mx-auto px-4">
     <!-- Hero Section -->
     <div class="text-center mb-10 md:mb-16">
-      <h1 class="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight">Redefining Grocery Delivery</h1>
+      <h1 class="text-2xl md:text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Redefining Grocery Delivery</h1>
       <p class="text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed">
         Lapadia Fresh was founded on a simple premise: everyone deserves access to fresh, high-quality food without the hassle of the supermarket.
       </p>
@@ -22,14 +22,14 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
       <div>
         <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-sm">🌱</div>
-        <h2 class="text-3xl font-bold text-slate-900 mb-4">Our Mission</h2>
+        <h2 class="text-xl md:text-3xl font-bold text-slate-900 mb-4">Our Mission</h2>
         <p class="text-slate-600 text-lg leading-relaxed mb-6">
           To build a sustainable, efficient, and reliable bridge between local farms, premium suppliers, and your kitchen. We believe that buying groceries shouldn't take hours out of your week.
         </p>
       </div>
       <div>
         <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-sm">🤝</div>
-        <h2 class="text-3xl font-bold text-slate-900 mb-4">Our Promise</h2>
+        <h2 class="text-xl md:text-3xl font-bold text-slate-900 mb-4">Our Promise</h2>
         <p class="text-slate-600 text-lg leading-relaxed">
           Quality is non-negotiable. If an apple is bruised, we don't pack it. If a delivery is late, we make it right. Our 100% freshness guarantee ensures you never pay for produce you wouldn't pick yourself.
         </p>

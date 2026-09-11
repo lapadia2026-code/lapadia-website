@@ -5,7 +5,7 @@
         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
         Back to Cart
       </NuxtLink>
-      <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Secure Checkout</h1>
+      <h1 class="text-2xl md:text-4xl font-extrabold text-slate-900 tracking-tight">Secure Checkout</h1>
       <p class="text-slate-500 mt-2 font-medium">Complete your details below to place your order.</p>
     </div>
     
@@ -215,7 +215,7 @@
           <h3 class="text-xl font-bold text-slate-900 mb-6 pb-4 border-b border-slate-100">Order Summary</h3>
           
           <div v-if="!isSubscriptionCheckout && cart.length === 0" class="text-center py-8">
-            <div class="text-4xl mb-4">🛒</div>
+            <div class="text-2xl md:text-4xl mb-4">🛒</div>
             <p class="text-slate-500 font-medium">Your cart is empty.</p>
             <NuxtLink to="/products" class="text-emerald-600 hover:text-emerald-500 font-bold mt-4 inline-block">Browse Products</NuxtLink>
           </div>
@@ -353,10 +353,7 @@
                 <div class="text-xs text-slate-500 line-clamp-1">{{ prod.description }}</div>
               </div>
               <div class="shrink-0">
-                <div :class="[
-                  'w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors',
-                  selectedSwapProductIds.includes(prod._id) ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-slate-300'
-                ]">
+                <div :class="[ 'w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors', selectedSwapProductIds.includes(prod._id) ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-slate-300' ]">
                   <svg v-if="selectedSwapProductIds.includes(prod._id)" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
                   </svg>
@@ -378,10 +375,7 @@
             <button 
               @click="confirmSwap"
               :disabled="selectedSwapProductIds.length !== (subscriptionPlan?.productIds?.length || 0)"
-              :class="[
-                'px-6 py-2.5 rounded-xl font-bold text-white transition-all shadow-sm',
-                selectedSwapProductIds.length === (subscriptionPlan?.productIds?.length || 0) ? 'bg-emerald-600 hover:bg-emerald-500 hover:shadow-md' : 'bg-slate-300 cursor-not-allowed'
-              ]"
+              :class="[ 'px-6 py-2.5 rounded-xl font-bold text-white transition-all shadow-sm', selectedSwapProductIds.length === (subscriptionPlan?.productIds?.length || 0) ? 'bg-emerald-600 hover:bg-emerald-500 hover:shadow-md' : 'bg-slate-300 cursor-not-allowed' ]"
             >
               Confirm Selection
             </button>
@@ -617,7 +611,8 @@ const handleCheckout = async () => {
     subscriptionFrequency: route.query.planId ? undefined : orderData.value.subscriptionFrequency,
     planId: route.query.planId ? route.query.planId : undefined,
     promoCode: appliedPromo.value ? appliedPromo.value.code : undefined,
-    scheduledTime
+    scheduledTime,
+    callbackUrl: window.location.origin + '/checkout/callback'
   };
 
   try {

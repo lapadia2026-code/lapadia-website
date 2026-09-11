@@ -23,11 +23,7 @@
             <button 
               v-for="cat in uniqueCategories" 
               :key="cat"
-              :class="['px-5 py-2 rounded-lg font-semibold text-sm transition-colors', 
-                activeProduct.category === cat 
-                  ? 'bg-slate-900 text-white shadow-md' 
-                  : 'bg-white/60 border border-slate-200 text-slate-600 hover:bg-white'
-              ]"
+              :class="['px-5 py-2 rounded-lg font-semibold text-sm transition-colors', activeProduct.category === cat ? 'bg-slate-900 text-white shadow-md' : 'bg-white/60 border border-slate-200 text-slate-600 hover:bg-white' ]"
             >
               {{ cat }}
             </button>
@@ -37,7 +33,7 @@
           <div class="min-h-[220px]">
             <transition name="slide-up" mode="out-in">
               <div :key="activeProduct._id || activeProduct.id">
-                <h1 class="text-6xl sm:text-7xl lg:text-[5.5rem] font-black tracking-tight text-slate-900 mb-6 leading-[1.1] font-serif" style="font-family: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;">
+                <h1 class="text-2xl md:text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 mb-6 leading-[1.1]" >
                   {{ activeProduct.name }}
                 </h1>
                 
@@ -47,7 +43,7 @@
                 
                 <!-- Price & CTA -->
                 <div class="flex flex-col sm:flex-row items-start sm:items-center gap-8 mb-12">
-                  <div class="text-4xl font-black text-slate-800">
+                  <div class="text-2xl md:text-4xl font-black text-slate-800">
                     ₦{{ activeProduct.price?.toLocaleString() }} 
                     <span class="text-2xl text-slate-400 font-medium line-through ml-2">₦{{ (activeProduct.price * 1.2).toLocaleString() }}</span>
                   </div>
@@ -68,7 +64,7 @@
 
           <!-- You Might Also Like -->
           <div>
-            <h3 class="text-lg font-bold text-slate-800 mb-4 font-serif italic">You might also like:</h3>
+            <h3 class="text-lg font-bold text-slate-800 mb-4 italic">You might also like:</h3>
             <transition-group name="list" tag="div" class="flex flex-wrap gap-4 relative">
               <NuxtLink 
                 v-for="suggested in suggestedProducts" 
@@ -131,7 +127,7 @@
         <div class="flex flex-col md:flex-row items-end justify-between mb-12 gap-4">
           <div>
             <div class="text-[#FFCD42] font-black tracking-wider uppercase text-sm mb-2">Our Menu</div>
-            <h2 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tight font-serif">Trending Blends</h2>
+            <h2 class="text-2xl md:text-4xl font-black text-slate-900 tracking-tight">Trending Blends</h2>
           </div>
           <NuxtLink to="/products" class="px-6 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-colors">
             View Full Menu
@@ -164,7 +160,7 @@
               </button>
 
               <NuxtLink :to="`/products/${product._id || product.id}`" class="block">
-                <div class="relative w-full h-48 bg-white rounded-2xl mb-5 overflow-hidden flex items-center justify-center text-5xl group-hover:scale-95 transition-transform duration-500 shadow-sm border border-slate-100 mix-blend-multiply">
+                <div class="relative w-full h-48 bg-white rounded-2xl mb-5 overflow-hidden flex items-center justify-center text-3xl md:text-5xl group-hover:scale-95 transition-transform duration-500 shadow-sm border border-slate-100 mix-blend-multiply">
                   <img :src="getHeroImage(product)" :alt="product.name" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                 </div>
               </NuxtLink>
@@ -172,7 +168,7 @@
               <div class="px-2 pb-2 flex-1 flex flex-col">
                 <div class="text-xs font-bold text-[#FFCD42] uppercase tracking-widest mb-1.5">{{ product.category || 'Smoothie' }}</div>
                 <NuxtLink :to="`/products/${product._id || product.id}`" class="block hover:text-[#FFCD42] transition-colors mb-3">
-                  <h3 class="font-black text-slate-900 text-xl leading-tight line-clamp-2 font-serif">{{ product.name }}</h3>
+                  <h3 class="font-black text-slate-900 text-xl leading-tight line-clamp-2">{{ product.name }}</h3>
                 </NuxtLink>
                 
                 <div class="mt-auto flex items-end justify-between pt-4">

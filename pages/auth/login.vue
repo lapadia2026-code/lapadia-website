@@ -12,9 +12,9 @@
       <div class="relative z-10 p-12 max-w-lg text-white">
         <div class="mb-8 flex items-center gap-3">
           <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-emerald-600 text-2xl font-bold shadow-lg">L</div>
-          <span class="text-3xl font-extrabold tracking-tight">Lapadia<span class="text-emerald-200">Fresh</span></span>
+          <span class="text-xl md:text-3xl font-extrabold tracking-tight">Lapadia<span class="text-emerald-200">Fresh</span></span>
         </div>
-        <h1 class="text-5xl font-black mb-6 leading-tight">Welcome back to fresh groceries.</h1>
+        <h1 class="text-3xl md:text-5xl font-black mb-6 leading-tight">Welcome back to fresh groceries.</h1>
         <p class="text-emerald-50 text-xl font-medium leading-relaxed opacity-90">Sign in to access your saved items, fast checkout, and personalized grocery recommendations.</p>
         
         <!-- Social Proof -->
@@ -33,7 +33,7 @@
     <div class="w-full lg:w-1/2 flex items-center justify-center p-4 md:p-8 sm:p-12 bg-slate-50">
       <div class="max-w-md w-full space-y-8">
         <div class="text-center lg:text-left">
-          <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Sign in</h2>
+          <h2 class="text-xl md:text-3xl font-extrabold text-slate-900 tracking-tight">Sign in</h2>
           <p class="mt-2 text-sm text-slate-500 font-medium">
             New to Lapadia Fresh? 
             <NuxtLink to="/auth/register" class="text-emerald-600 hover:text-emerald-500 font-bold underline decoration-emerald-200 underline-offset-4 transition-colors">Create an account</NuxtLink>

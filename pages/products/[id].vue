@@ -55,11 +55,11 @@
             </button>
           </div>
           
-          <h1 class="text-5xl md:text-6xl font-black text-slate-900 tracking-tight mb-4 font-serif leading-[1.1]" style="font-family: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;">
+          <h1 class="text-2xl md:text-4xl font-black text-slate-900 tracking-tight mb-4 leading-[1.1]" >
             {{ product.name }}
           </h1>
           
-          <div class="text-3xl font-black text-slate-800 mb-6 flex items-end gap-3">
+          <div class="text-xl md:text-3xl font-black text-slate-800 mb-6 flex items-end gap-3">
             ₦{{ product.price?.toLocaleString() }}
             <span class="text-xl text-slate-400 font-medium line-through mb-1">₦{{ (product.price * 1.2).toLocaleString() }}</span>
           </div>
@@ -110,50 +110,50 @@
       <!-- Redesigned Nutrition Facts -->
       <div v-if="product && product.nutritionalInfo" class="mt-20 max-w-4xl">
         <div class="flex items-end justify-between border-b border-slate-200 pb-4 mb-8">
-          <h2 class="text-3xl font-black text-slate-900 font-serif">Nutrition Profile</h2>
+          <h2 class="text-xl md:text-3xl font-black text-slate-900">Nutrition Profile</h2>
           <p class="text-sm font-bold text-slate-500 uppercase tracking-wider">Per {{ product.nutritionalInfo.servingSize || '450ml' }}</p>
         </div>
         
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6">
           <div class="flex flex-col items-center justify-center p-6 bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow group">
-            <div class="text-3xl font-black text-slate-800 mb-1 group-hover:scale-110 transition-transform">{{ product.nutritionalInfo.calories }}</div>
+            <div class="text-xl md:text-3xl font-black text-slate-800 mb-1 group-hover:scale-110 transition-transform">{{ product.nutritionalInfo.calories }}</div>
             <div class="text-xs font-bold text-slate-400 uppercase tracking-widest">Calories</div>
           </div>
           
           <div class="flex flex-col items-center justify-center p-6 bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow group relative overflow-hidden">
             <div class="absolute bottom-0 left-0 w-full h-1 bg-blue-400"></div>
-            <div class="text-3xl font-black text-slate-800 mb-1 group-hover:scale-110 transition-transform">{{ product.nutritionalInfo.protein }}g</div>
+            <div class="text-xl md:text-3xl font-black text-slate-800 mb-1 group-hover:scale-110 transition-transform">{{ product.nutritionalInfo.protein }}g</div>
             <div class="text-xs font-bold text-slate-400 uppercase tracking-widest">Protein</div>
           </div>
           
           <div class="flex flex-col items-center justify-center p-6 bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow group relative overflow-hidden">
              <div class="absolute bottom-0 left-0 w-full h-1 bg-amber-400"></div>
-            <div class="text-3xl font-black text-slate-800 mb-1 group-hover:scale-110 transition-transform">{{ product.nutritionalInfo.carbs }}g</div>
+            <div class="text-xl md:text-3xl font-black text-slate-800 mb-1 group-hover:scale-110 transition-transform">{{ product.nutritionalInfo.carbs }}g</div>
             <div class="text-xs font-bold text-slate-400 uppercase tracking-widest">Carbs</div>
           </div>
           
           <div class="flex flex-col items-center justify-center p-6 bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow group relative overflow-hidden">
              <div class="absolute bottom-0 left-0 w-full h-1 bg-rose-400"></div>
-            <div class="text-3xl font-black text-slate-800 mb-1 group-hover:scale-110 transition-transform">{{ product.nutritionalInfo.fat }}g</div>
+            <div class="text-xl md:text-3xl font-black text-slate-800 mb-1 group-hover:scale-110 transition-transform">{{ product.nutritionalInfo.fat }}g</div>
             <div class="text-xs font-bold text-slate-400 uppercase tracking-widest">Fat</div>
           </div>
           
           <div class="flex flex-col items-center justify-center p-6 bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow group relative overflow-hidden">
              <div class="absolute bottom-0 left-0 w-full h-1 bg-emerald-400"></div>
-            <div class="text-3xl font-black text-slate-800 mb-1 group-hover:scale-110 transition-transform">{{ product.nutritionalInfo.fiber }}g</div>
+            <div class="text-xl md:text-3xl font-black text-slate-800 mb-1 group-hover:scale-110 transition-transform">{{ product.nutritionalInfo.fiber }}g</div>
             <div class="text-xs font-bold text-slate-400 uppercase tracking-widest">Fiber</div>
           </div>
           
           <div class="flex flex-col items-center justify-center p-6 bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow group relative overflow-hidden">
              <div class="absolute bottom-0 left-0 w-full h-1 bg-purple-400"></div>
-            <div class="text-3xl font-black text-slate-800 mb-1 group-hover:scale-110 transition-transform">{{ product.nutritionalInfo.sugar }}g</div>
+            <div class="text-xl md:text-3xl font-black text-slate-800 mb-1 group-hover:scale-110 transition-transform">{{ product.nutritionalInfo.sugar }}g</div>
             <div class="text-xs font-bold text-slate-400 uppercase tracking-widest">Sugar</div>
           </div>
         </div>
       </div>
 
       <div v-if="!loading && !product" class="text-center py-24">
-        <h2 class="text-3xl font-black text-slate-900 mb-4 font-serif">Product Not Found</h2>
+        <h2 class="text-xl md:text-3xl font-black text-slate-900 mb-4">Product Not Found</h2>
         <p class="text-slate-500 mb-8 font-medium">The blend you're looking for might have been removed or doesn't exist.</p>
         <NuxtLink to="/products" class="px-8 py-3 bg-slate-900 text-white font-bold rounded-xl shadow-lg hover:bg-slate-800 transition-colors">Return to Menu</NuxtLink>
       </div>

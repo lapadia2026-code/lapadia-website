@@ -4,7 +4,7 @@
       
       <!-- Contact Information -->
       <div>
-        <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-6">Get in Touch</h1>
+        <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-6">Get in Touch</h1>
         <p class="text-lg text-slate-600 mb-12">Whether you have a question about your order, our subscription plans, or anything else, our team is ready to answer all your questions.</p>
         
         <div class="space-y-8">

@@ -8,7 +8,7 @@
       </button>
 
       <div class="p-4 md:p-8">
-        <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight text-center mb-2">{{ isLogin ? 'Sign in' : 'Create an account' }}</h2>
+        <h2 class="text-xl md:text-3xl font-extrabold text-slate-900 tracking-tight text-center mb-2">{{ isLogin ? 'Sign in' : 'Create an account' }}</h2>
         <p class="text-center text-sm text-slate-500 font-medium mb-8">
           To continue with checkout, please {{ isLogin ? 'sign in' : 'create an account' }}.
         </p>

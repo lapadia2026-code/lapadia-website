@@ -1,17 +1,20 @@
 <template>
   <div class="min-h-screen bg-slate-50 font-sans text-slate-900 selection:bg-blue-600 selection:text-white flex flex-col">
     <!-- Navbar -->
-    <header class="fixed top-0 inset-x-0 h-20 glass z-50 transition-all duration-300">
+    <header class="fixed top-0 inset-x-0 h-20 glass z-50 transition-all duration-300 bg-white/80 backdrop-blur-md border-b border-slate-200">
       <div class="max-w-7xl mx-auto px-4 h-full flex items-center justify-between">
-        <NuxtLink to="/" class="text-2xl font-bold text-blue-600 tracking-tight">
-          <img src="@/assets/img/logo.jpg" class="h-20 w-auto rounded-full" />
+        <NuxtLink to="/" class="text-2xl font-bold text-blue-600 tracking-tight flex items-center gap-2">
+          <img src="@/assets/img/logo.jpg" class="h-16 w-auto rounded-full" />
         </NuxtLink>
+        
+        <!-- Desktop Nav -->
         <nav class="hidden md:flex items-center gap-8 font-medium">
           <NuxtLink to="/" class="hover:text-blue-600 transition-colors">Home</NuxtLink>
           <NuxtLink to="/products" class="hover:text-blue-600 transition-colors">Shop</NuxtLink>
           <NuxtLink to="/subscriptions" class="hover:text-blue-600 transition-colors">Subscriptions</NuxtLink>
         </nav>
-        <div class="flex items-center gap-4">
+        
+        <div class="flex items-center gap-3 md:gap-4">
           <NuxtLink to="/cart" class="relative p-2 rounded-full hover:bg-slate-100 transition-colors">
             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -21,24 +24,48 @@
           
           <ClientOnly>
             <template v-if="isLoggedIn">
-              <NuxtLink to="/account" class="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-800 px-4 py-2 rounded-full font-medium transition-colors">
+              <NuxtLink to="/account" class="hidden md:flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-800 px-4 py-2 rounded-full font-medium transition-colors">
                 <div class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs">
                   {{ user?.name ? user.name.substring(0, 1) : 'U' }}
                 </div>
                 <span>My Account</span>
               </NuxtLink>
+              <NuxtLink to="/account" class="md:hidden flex items-center justify-center w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 transition-colors">
+                 <div class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs">
+                  {{ user?.name ? user.name.substring(0, 1) : 'U' }}
+                </div>
+              </NuxtLink>
             </template>
             <template v-else>
-              <NuxtLink to="/auth/login" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-full font-medium transition-colors">
+              <NuxtLink to="/auth/login" class="bg-blue-600 hover:bg-blue-700 text-white px-4 md:px-5 py-2 rounded-full font-medium transition-colors text-sm md:text-base">
                 Sign In
               </NuxtLink>
             </template>
             <template #fallback>
-              <div class="w-24 h-10 bg-slate-200 animate-pulse rounded-full"></div>
+              <div class="w-20 h-10 bg-slate-200 animate-pulse rounded-full"></div>
             </template>
           </ClientOnly>
+
+          <!-- Mobile Menu Button -->
+          <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2 rounded-full hover:bg-slate-100 transition-colors">
+            <svg v-if="!mobileMenuOpen" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            <svg v-else class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
       </div>
+
+      <!-- Mobile Nav -->
+      <transition enter-active-class="transition duration-200 ease-out" enter-from-class="opacity-0 -translate-y-2" enter-to-class="opacity-100 translate-y-0" leave-active-class="transition duration-150 ease-in" leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 -translate-y-2">
+        <nav v-if="mobileMenuOpen" class="md:hidden absolute top-20 inset-x-0 bg-white border-b border-slate-200 shadow-lg p-4 flex flex-col gap-4 font-medium z-40">
+          <NuxtLink to="/" @click="mobileMenuOpen = false" class="block px-4 py-2 rounded-lg hover:bg-slate-50 transition-colors">Home</NuxtLink>
+          <NuxtLink to="/products" @click="mobileMenuOpen = false" class="block px-4 py-2 rounded-lg hover:bg-slate-50 transition-colors">Shop</NuxtLink>
+          <NuxtLink to="/subscriptions" @click="mobileMenuOpen = false" class="block px-4 py-2 rounded-lg bg-blue-50 text-blue-600 transition-colors">Subscriptions</NuxtLink>
+        </nav>
+      </transition>
     </header>
 
     <!-- Main Content -->
@@ -119,12 +146,7 @@
     <div class="fixed bottom-4 right-4 z-[100] flex flex-col gap-2 pointer-events-none">
       <div v-for="toast in toasts" :key="toast.id" 
            class="pointer-events-auto w-80 bg-white border border-slate-100 shadow-xl rounded-xl p-4 transform transition-all duration-300 translate-y-0 opacity-100 flex items-start gap-3"
-           :class="{
-             'border-l-4 border-l-emerald-500': toast.type === 'success',
-             'border-l-4 border-l-rose-500': toast.type === 'error',
-             'border-l-4 border-l-blue-500': toast.type === 'info',
-             'border-l-4 border-l-amber-500': toast.type === 'warning'
-           }">
+           :class="{ 'border-l-4 border-l-emerald-500': toast.type === 'success', 'border-l-4 border-l-rose-500': toast.type === 'error', 'border-l-4 border-l-blue-500': toast.type === 'info', 'border-l-4 border-l-amber-500': toast.type === 'warning' }">
         <div class="flex-1">
           <h4 class="text-sm font-bold text-slate-900">{{ toast.title }}</h4>
           <p class="text-sm text-slate-500 mt-1">{{ toast.message }}</p>
@@ -135,11 +157,12 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useCustomToast } from '~/composables/core/useCustomToast';
 import { useCart } from '~/composables/modules/cart/useCart';
 import { useAuth } from '~/composables/core/useAuth';
 
+const mobileMenuOpen = ref(false);
 const { toasts } = useCustomToast();
 const { cartItemCount } = useCart();
 const { isLoggedIn, user, initAuth } = useAuth();

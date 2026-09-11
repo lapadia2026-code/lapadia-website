@@ -1,9 +1,9 @@
 <template>
   <div class="py-6 md:py-10 pb-16 max-w-7xl mx-auto px-4 min-h-screen">
-    <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight mb-8">Your Cart</h1>
+    <h1 class="text-2xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-8">Your Cart</h1>
     
     <div v-if="cart.length === 0" class="text-center py-24 bg-slate-50 rounded-3xl border border-slate-100">
-      <div class="text-6xl mb-4">🛒</div>
+      <div class="text-3xl md:text-6xl mb-4">🛒</div>
       <h2 class="text-2xl font-bold text-slate-900 mb-2">Your cart is empty</h2>
       <p class="text-slate-500 mb-8 max-w-md mx-auto">Looks like you haven't added any fresh groceries to your cart yet.</p>
       <NuxtLink to="/products" class="px-4 md:px-8 py-4 bg-slate-900 text-white rounded-full font-bold shadow-xl hover:bg-slate-800 transition-colors">
@@ -15,7 +15,7 @@
       <!-- Cart Items -->
       <div class="flex-1 space-y-6">
         <div v-for="item in cart" :key="item.product._id" class="flex gap-6 p-4 bg-white rounded-2xl border border-slate-100 shadow-sm items-center">
-          <div class="w-24 h-24 bg-slate-100 rounded-xl overflow-hidden flex items-center justify-center text-4xl shrink-0">
+          <div class="w-24 h-24 bg-slate-100 rounded-xl overflow-hidden flex items-center justify-center text-2xl md:text-4xl shrink-0">
             <img v-if="item.product.imageUrl" :src="item.product.imageUrl" :alt="item.product.name" class="w-full h-full object-cover" />
             <span v-else>{{ item.product.icon || '📦' }}</span>
           </div>
@@ -54,7 +54,7 @@
             </div>
             <div class="border-t border-slate-200 pt-4 flex justify-between items-end mt-4">
               <span class="text-slate-900 font-bold">Total</span>
-              <span class="text-3xl font-extrabold text-slate-900">₦{{ Number(cartTotal).toLocaleString() }}</span>
+              <span class="text-xl md:text-3xl font-extrabold text-slate-900">₦{{ Number(cartTotal).toLocaleString() }}</span>
             </div>
           </div>
           <NuxtLink to="/checkout" class="block w-full py-4 text-center bg-blue-600 text-white rounded-full font-bold text-lg hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/30">

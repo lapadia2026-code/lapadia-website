@@ -34,7 +34,7 @@
         </div>
 
         <!-- Title -->
-        <h1 class="text-4xl md:text-5xl font-black text-slate-900 tracking-tight mb-6 leading-[1.1]" style="font-family: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;">
+        <h1 class="text-2xl md:text-4xl font-black text-slate-900 tracking-tight mb-6 leading-[1.1]" >
           {{ blog.title }}
         </h1>
 
@@ -56,7 +56,7 @@
 
     <!-- Not Found -->
     <div v-else class="text-center py-24 max-w-3xl mx-auto px-6">
-      <h2 class="text-3xl font-black text-slate-900 mb-4" style="font-family: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;">Post Not Found</h2>
+      <h2 class="text-xl md:text-3xl font-black text-slate-900 mb-4" >Post Not Found</h2>
       <p class="text-slate-500 mb-8 font-medium">This blog post might have been removed or doesn't exist.</p>
       <NuxtLink to="/blog" class="px-8 py-3 bg-slate-900 text-white font-bold rounded-xl shadow-lg hover:bg-slate-800 transition-colors">Return to Blog</NuxtLink>
     </div>
