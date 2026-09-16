@@ -1,5 +1,5 @@
 <template>
-  <div class="py-8 md:py-12 max-w-6xl mx-auto px-4">
+  <div class="py-8 md:py-12 max-w-6xl mx-auto px-5 md:px-8">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
       
       <!-- Contact Information -->
@@ -38,26 +38,33 @@
         <form class="space-y-6" @submit.prevent="submitForm">
           <div>
             <label class="block text-sm font-bold text-slate-700 mb-2">Full Name</label>
-            <input type="text" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all font-medium" placeholder="Jane Doe" />
+            <input type="text" v-model="formData.fullName" required class="w-full px-5 md:px-8 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all font-medium" placeholder="Jane Doe" />
           </div>
           
-          <div>
-            <label class="block text-sm font-bold text-slate-700 mb-2">Email Address</label>
-            <input type="email" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all font-medium" placeholder="jane@example.com" />
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-bold text-slate-700 mb-2">Email Address</label>
+              <input type="email" v-model="formData.email" required class="w-full px-5 md:px-8 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all font-medium" placeholder="jane@example.com" />
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-slate-700 mb-2">Phone Number (Optional)</label>
+              <input type="tel" v-model="formData.phone" class="w-full px-5 md:px-8 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all font-medium" placeholder="+234 (800) 000-0000" />
+            </div>
           </div>
           
           <div>
             <label class="block text-sm font-bold text-slate-700 mb-2">Subject</label>
-            <input type="text" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all font-medium" placeholder="Where is my order?" />
+            <input type="text" v-model="formData.subject" required class="w-full px-5 md:px-8 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all font-medium" placeholder="Where is my order?" />
           </div>
           
           <div>
             <label class="block text-sm font-bold text-slate-700 mb-2">Message</label>
-            <textarea required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all font-medium resize-none" rows="4" placeholder="How can we help you?"></textarea>
+            <textarea v-model="formData.message" required class="w-full px-5 md:px-8 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all font-medium resize-none" rows="4" placeholder="How can we help you?"></textarea>
           </div>
           
-          <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-black py-4 px-6 rounded-xl transition-all shadow-lg hover:-translate-y-0.5 hover:shadow-xl active:scale-[0.98]">
-            Send Message
+          <button type="submit" :disabled="isSubmitting" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-black py-4 px-6 rounded-xl transition-all shadow-lg hover:-translate-y-0.5 hover:shadow-xl active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+            <svg v-if="isSubmitting" class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+            {{ isSubmitting ? 'Sending...' : 'Send Message' }}
           </button>
         </form>
       </div>
@@ -67,7 +74,9 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import { useCustomToast } from '~/composables/core/useCustomToast';
+import { GATEWAY_ENDPOINT } from '~/api_factory/axios.config';
 
 useHead({
   title: 'Contact Support - Lapadia Fresh',
@@ -77,12 +86,46 @@ useHead({
 });
 
 const { showToast } = useCustomToast();
+const isSubmitting = ref(false);
 
-const submitForm = () => {
-  showToast({
-    title: 'Message Sent!',
-    message: 'We have received your message and will get back to you shortly.',
-    type: 'success'
-  });
+const formData = ref({
+  fullName: '',
+  email: '',
+  phone: '',
+  subject: '',
+  message: ''
+});
+
+const submitForm = async () => {
+  if (isSubmitting.value) return;
+  
+  isSubmitting.value = true;
+  
+  try {
+    await GATEWAY_ENDPOINT.post('/contacts', formData.value);
+    
+    showToast({
+      title: 'Message Sent!',
+      message: 'We have received your message and will get back to you shortly.',
+      type: 'success'
+    });
+    
+    // Reset form
+    formData.value = {
+      fullName: '',
+      email: '',
+      phone: '',
+      subject: '',
+      message: ''
+    };
+  } catch (error: any) {
+    showToast({
+      title: 'Submission Failed',
+      message: error.response?.data?.message || 'Could not send message. Please try again.',
+      type: 'error'
+    });
+  } finally {
+    isSubmitting.value = false;
+  }
 };
 </script>

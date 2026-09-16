@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-7xl mx-auto px-4 py-12">
+  <div class="max-w-7xl mx-auto px-5 md:px-8 py-12">
     <div class="flex flex-col md:flex-row gap-8">
       <!-- Sidebar -->
       <aside class="w-full md:w-64 shrink-0">
@@ -8,16 +8,16 @@
             <h2 class="font-bold text-lg text-slate-900">My Account</h2>
             <p class="text-sm text-slate-500">{{ user?.email || 'customer@lapadia.com' }}</p>
           </div>
-          <NuxtLink to="/account" class="block px-4 py-2 rounded-lg font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
+          <NuxtLink to="/account" class="block px-5 md:px-8 py-2 rounded-lg font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
             Profile Details
           </NuxtLink>
-          <NuxtLink to="/account/orders" class="block px-4 py-2 rounded-lg font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
+          <NuxtLink to="/account/orders" class="block px-5 md:px-8 py-2 rounded-lg font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
             Order History
           </NuxtLink>
-          <NuxtLink to="/account/subscriptions" class="block px-4 py-2 rounded-lg font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
+          <NuxtLink to="/account/subscriptions" class="block px-5 md:px-8 py-2 rounded-lg font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
             My Subscriptions
           </NuxtLink>
-          <button @click="showLogoutModal = true" class="w-full text-left mt-4 block px-4 py-2 rounded-lg font-medium text-rose-600 hover:bg-rose-50 transition-colors">
+          <button @click="showLogoutModal = true" class="w-full text-left mt-4 block px-5 md:px-8 py-2 rounded-lg font-medium text-rose-600 hover:bg-rose-50 transition-colors">
             Logout
           </button>
         </div>
@@ -81,7 +81,7 @@
                 </span>
               </div>
               <div class="mt-4 md:mt-0 md:ml-auto">
-                <button v-if="order.paymentStatus === 'pending'" @click="payOrder(order._id)" class="px-4 py-2 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-colors text-sm shadow-sm">
+                <button v-if="order.paymentStatus === 'pending'" @click="payOrder(order._id)" class="px-5 md:px-8 py-2 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-colors text-sm shadow-sm">
                   Pay Now
                 </button>
               </div>

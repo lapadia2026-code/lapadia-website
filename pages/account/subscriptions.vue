@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-7xl mx-auto px-4 py-12">
+  <div class="max-w-7xl mx-auto px-5 md:px-8 py-12">
     <div class="flex flex-col md:flex-row gap-8">
       <!-- Sidebar -->
       <aside class="w-full md:w-64 shrink-0">
@@ -8,16 +8,16 @@
             <h2 class="font-bold text-lg text-slate-900">My Account</h2>
             <p class="text-sm text-slate-500">{{ user?.email || 'customer@lapadia.com' }}</p>
           </div>
-          <NuxtLink to="/account" class="block px-4 py-2 rounded-lg font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
+          <NuxtLink to="/account" class="block px-5 md:px-8 py-2 rounded-lg font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
             Profile Details
           </NuxtLink>
-          <NuxtLink to="/account/orders" class="block px-4 py-2 rounded-lg font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
+          <NuxtLink to="/account/orders" class="block px-5 md:px-8 py-2 rounded-lg font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
             Order History
           </NuxtLink>
-          <NuxtLink to="/account/subscriptions" class="block px-4 py-2 rounded-lg font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
+          <NuxtLink to="/account/subscriptions" class="block px-5 md:px-8 py-2 rounded-lg font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
             My Subscriptions
           </NuxtLink>
-          <button @click="showLogoutModal = true" class="w-full text-left mt-4 block px-4 py-2 rounded-lg font-medium text-rose-600 hover:bg-rose-50 transition-colors">
+          <button @click="showLogoutModal = true" class="w-full text-left mt-4 block px-5 md:px-8 py-2 rounded-lg font-medium text-rose-600 hover:bg-rose-50 transition-colors">
             Logout
           </button>
         </div>
@@ -106,10 +106,10 @@
             </div>
 
             <div class="flex justify-end gap-3 border-t border-slate-100 pt-4" v-if="sub.status === 'active'">
-              <button v-if="sub.planId?.allowSwaps !== false && getSwappableProducts(sub).length > 0" @click="openSwapModal(sub)" class="px-4 py-2 text-sm font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors flex items-center gap-2">
+              <button v-if="sub.planId?.allowSwaps !== false && getSwappableProducts(sub).length > 0" @click="openSwapModal(sub)" class="px-5 md:px-8 py-2 text-sm font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors flex items-center gap-2">
                 Swap Products
               </button>
-              <button @click="openCancelModal(sub)" class="px-4 py-2 text-sm font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-lg transition-colors">
+              <button @click="openCancelModal(sub)" class="px-5 md:px-8 py-2 text-sm font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-lg transition-colors">
                 Cancel
               </button>
             </div>
@@ -182,7 +182,7 @@
               
               <div class="text-left mb-6">
                 <label class="block text-sm font-semibold text-slate-700 mb-2">Reason for cancellation (optional)</label>
-                <textarea v-model="cancelReason" rows="3" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 outline-none transition-all text-sm" placeholder="Tell us why you are leaving..."></textarea>
+                <textarea v-model="cancelReason" rows="3" class="w-full px-5 md:px-8 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 outline-none transition-all text-sm" placeholder="Tell us why you are leaving..."></textarea>
               </div>
 
               <div class="flex gap-3">

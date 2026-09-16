@@ -1,5 +1,5 @@
 <template>
-  <div class="py-6 md:py-10 pb-16 max-w-7xl mx-auto px-4">
+  <div class="py-6 md:py-10 pb-16 max-w-7xl mx-auto px-5 md:px-8">
     <div class="mb-10">
       <NuxtLink to="/cart" class="text-emerald-600 hover:text-emerald-500 font-bold flex items-center gap-2 w-fit mb-4 transition-colors">
         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
@@ -24,24 +24,24 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="space-y-2">
               <label class="text-sm font-bold text-slate-700">Full Name</label>
-              <input v-model="orderData.fullName" required type="text" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all font-medium" placeholder="John Doe" />
+              <input v-model="orderData.fullName" required type="text" class="w-full px-5 md:px-8 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all font-medium" placeholder="John Doe" />
             </div>
             <div class="space-y-2">
               <label class="text-sm font-bold text-slate-700">Email Address</label>
-              <input v-model="orderData.email" required type="email" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all font-medium" placeholder="john@example.com" />
+              <input v-model="orderData.email" required type="email" class="w-full px-5 md:px-8 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all font-medium" placeholder="john@example.com" />
             </div>
             <div class="space-y-2">
               <label class="text-sm font-bold text-slate-700">Phone Number <span class="text-rose-500">*</span></label>
               <div class="flex gap-2 relative z-20">
                 <CountryCodeSelect v-model="orderData.phoneCode" class="w-32" />
-                <input v-model="orderData.phone" required type="tel" class="flex-1 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all font-medium" placeholder="800 000 0000" />
+                <input v-model="orderData.phone" required type="tel" class="flex-1 px-5 md:px-8 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all font-medium" placeholder="800 000 0000" />
               </div>
             </div>
             <div class="space-y-2">
               <label class="text-sm font-bold text-slate-700">Alternative Phone Number <span class="text-slate-400 font-normal">(WhatsApp)</span></label>
               <div class="flex gap-2 relative z-10">
                 <CountryCodeSelect v-model="orderData.altPhoneCode" class="w-32" />
-                <input v-model="orderData.altPhone" type="tel" class="flex-1 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all font-medium" placeholder="800 000 0000" />
+                <input v-model="orderData.altPhone" type="tel" class="flex-1 px-5 md:px-8 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all font-medium" placeholder="800 000 0000" />
               </div>
             </div>
             <div class="md:col-span-2 space-y-4 border p-5 rounded-2xl bg-slate-50 border-slate-200">
@@ -50,30 +50,27 @@
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div class="space-y-2">
                   <label class="text-xs font-bold text-slate-700">Country</label>
-                  <select disabled class="w-full px-4 py-3 bg-slate-100 border border-slate-200 rounded-xl outline-none font-medium text-slate-500 cursor-not-allowed">
-                    <option>Nigeria</option>
-                  </select>
+                  <input disabled type="text" value="Nigeria" class="w-full px-5 md:px-8 py-3 bg-slate-100 border border-slate-200 rounded-xl outline-none font-medium text-slate-500 cursor-not-allowed" />
                 </div>
                 <div class="space-y-2">
                   <label class="text-xs font-bold text-slate-700">State</label>
-                  <select disabled class="w-full px-4 py-3 bg-slate-100 border border-slate-200 rounded-xl outline-none font-medium text-slate-500 cursor-not-allowed">
-                    <option>Lagos</option>
-                  </select>
+                  <input disabled type="text" value="Lagos" class="w-full px-5 md:px-8 py-3 bg-slate-100 border border-slate-200 rounded-xl outline-none font-medium text-slate-500 cursor-not-allowed" />
                 </div>
                 <div class="space-y-2 sm:col-span-2">
-                  <label class="text-xs font-bold text-slate-700">Local Government Area (LGA) <span class="text-rose-500">*</span></label>
-                  <select v-model="orderData.lga" required class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all font-medium">
-                    <option value="" disabled selected>Select your LGA...</option>
-                    <option v-for="lga in lagosLGAs" :key="lga" :value="lga">{{ lga }}</option>
-                  </select>
+                  <CustomSelect 
+                    v-model="orderData.lga"
+                    label="Local Government Area (LGA) *"
+                    :options="lagosLGAs.map(lga => ({ label: lga, value: lga }))"
+                    placeholder="Select your LGA..."
+                  />
                 </div>
                 <div class="space-y-2 sm:col-span-2">
                   <label class="text-xs font-bold text-slate-700">Street Address <span class="text-rose-500">*</span></label>
-                  <input v-model="orderData.streetAddress" required type="text" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all font-medium" placeholder="e.g. 15 Awolowo Road, Ikoyi" />
+                  <input v-model="orderData.streetAddress" required type="text" class="w-full px-5 md:px-8 py-3 bg-white border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all font-medium" placeholder="e.g. 15 Awolowo Road, Ikoyi" />
                 </div>
                 <div class="space-y-2 sm:col-span-2">
                   <label class="text-xs font-bold text-slate-700">Nearest Landmark</label>
-                  <input v-model="orderData.landmark" type="text" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all font-medium" placeholder="e.g. Opposite GTBank" />
+                  <input v-model="orderData.landmark" type="text" class="w-full px-5 md:px-8 py-3 bg-white border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all font-medium" placeholder="e.g. Opposite GTBank" />
                 </div>
               </div>
             </div>
@@ -120,18 +117,25 @@
             <p class="text-sm text-slate-500 mb-4">Want your smoothies at a specific time? Pick a date and time slot.</p>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div class="space-y-2">
-                <label class="text-sm font-bold text-slate-700">Date</label>
-                <input v-model="orderData.scheduledDate" type="date" :min="minScheduleDate" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all font-medium" />
+                <CustomDatePicker
+                  v-model="orderData.scheduledDate"
+                  label="Date"
+                  :min="minScheduleDate"
+                />
               </div>
               <div class="space-y-2">
-                <label class="text-sm font-bold text-slate-700">Time Slot</label>
-                <select v-model="orderData.scheduledSlot" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all font-medium">
-                  <option value="">ASAP (No preference)</option>
-                  <option value="09:00">Morning (9:00 AM)</option>
-                  <option value="12:00">Noon (12:00 PM)</option>
-                  <option value="15:00">Afternoon (3:00 PM)</option>
-                  <option value="18:00">Evening (6:00 PM)</option>
-                </select>
+                <CustomSelect
+                  v-model="orderData.scheduledSlot"
+                  label="Time Slot"
+                  :options="[
+                    {label: 'ASAP (No preference)', value: ''},
+                    {label: 'Morning (9:00 AM)', value: '09:00'},
+                    {label: 'Noon (12:00 PM)', value: '12:00'},
+                    {label: 'Afternoon (3:00 PM)', value: '15:00'},
+                    {label: 'Evening (6:00 PM)', value: '18:00'}
+                  ]"
+                  placeholder="Select time slot..."
+                />
               </div>
             </div>
           </div>
@@ -166,28 +170,14 @@
               <label class="text-sm font-bold text-slate-800 block mb-2">How often?</label>
               
               <!-- Custom Dropdown -->
-              <div class="relative">
-                <button 
-                  type="button"
-                  @click="isFrequencyDropdownOpen = !isFrequencyDropdownOpen" 
-                  class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl flex items-center justify-between hover:border-emerald-300 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 transition-colors"
-                >
-                  <span class="font-medium text-slate-700 capitalize">{{ orderData.subscriptionFrequency }}</span>
-                  <svg :class="['w-5 h-5 text-slate-400 transition-transform', isFrequencyDropdownOpen ? 'rotate-180' : '']" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                
-                <div v-if="isFrequencyDropdownOpen" class="absolute z-50 w-full mt-2 bg-white border border-slate-100 rounded-xl shadow-xl py-2 overflow-hidden">
-                  <button type="button" @click="orderData.subscriptionFrequency = 'weekly'; isFrequencyDropdownOpen = false" class="w-full px-4 py-3 text-left hover:bg-slate-50 transition-colors flex items-center justify-between">
-                    <span class="font-medium text-slate-700">Weekly</span>
-                    <svg v-if="orderData.subscriptionFrequency === 'weekly'" class="w-5 h-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  </button>
-                  <button type="button" @click="orderData.subscriptionFrequency = 'monthly'; isFrequencyDropdownOpen = false" class="w-full px-4 py-3 text-left hover:bg-slate-50 transition-colors flex items-center justify-between">
-                    <span class="font-medium text-slate-700">Monthly</span>
-                    <svg v-if="orderData.subscriptionFrequency === 'monthly'" class="w-5 h-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                  </button>
-                </div>
+              <div class="mt-1">
+                <CustomSelect
+                  v-model="orderData.subscriptionFrequency"
+                  :options="[
+                    {label: 'Weekly', value: 'weekly'},
+                    {label: 'Monthly', value: 'monthly'}
+                  ]"
+                />
               </div>
             </div>
 
@@ -200,6 +190,19 @@
             </label>
           </div>
           
+          <div v-if="isSubscriptionCheckout" class="mt-6 mb-4">
+            <label class="flex items-start gap-3 cursor-pointer p-4 bg-slate-50 rounded-xl border border-slate-200">
+              <input v-model="orderData.acceptedTerms" type="checkbox" class="mt-1 rounded text-emerald-600 focus:ring-emerald-500 w-4 h-4 border-slate-300" />
+              <div class="text-sm text-slate-700">
+                I accept the 
+                <button type="button" @click.stop="showTermsModal = true" class="text-emerald-600 font-bold hover:underline inline-flex items-center gap-1">
+                  Subscription Terms & Conditions
+                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                </button>
+              </div>
+            </label>
+          </div>
+
           <button type="submit" :disabled="loading || (!isSubscriptionCheckout && cart.length === 0 && !route.query.planId) || !isFormValid" class="w-full mt-8 bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white font-black py-4 px-6 rounded-xl transition-all shadow-xl hover:-translate-y-0.5 hover:shadow-2xl active:scale-[0.98] flex items-center justify-center gap-3 text-lg">
             <span v-if="loading" class="w-6 h-6 border-2 border-slate-400 border-t-white rounded-full animate-spin"></span>
             <span v-if="loading">Processing Order...</span>
@@ -285,11 +288,11 @@
             <div class="border-t border-slate-100 py-6">
               <label class="text-sm font-bold text-slate-700 block mb-2">Have a Promo Code?</label>
               <div class="flex gap-2">
-                <input v-model="promoCodeInput" :disabled="!!appliedPromo" type="text" class="flex-1 px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all uppercase font-mono" placeholder="ENTER CODE" />
-                <button v-if="!appliedPromo" @click="applyPromo" :disabled="!promoCodeInput || validatingPromo" type="button" class="bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white px-4 py-2 rounded-lg font-bold transition-colors">
+                <input v-model="promoCodeInput" :disabled="!!appliedPromo" type="text" class="flex-1 px-5 md:px-8 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all uppercase font-mono" placeholder="ENTER CODE" />
+                <button v-if="!appliedPromo" @click="applyPromo" :disabled="!promoCodeInput || validatingPromo" type="button" class="bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white px-5 md:px-8 py-2 rounded-lg font-bold transition-colors">
                   {{ validatingPromo ? '...' : 'Apply' }}
                 </button>
-                <button v-else @click="removePromo" type="button" class="bg-rose-100 hover:bg-rose-200 text-rose-600 px-4 py-2 rounded-lg font-bold transition-colors">
+                <button v-else @click="removePromo" type="button" class="bg-rose-100 hover:bg-rose-200 text-rose-600 px-5 md:px-8 py-2 rounded-lg font-bold transition-colors">
                   Remove
                 </button>
               </div>
@@ -322,6 +325,49 @@
     </div>
 
     <AuthModal :isOpen="showAuthModal" @success="handleAuthSuccess" @close="showAuthModal = false" />
+
+    <!-- Subscription Terms Modal -->
+    <div v-if="showTermsModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+      <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" @click="showTermsModal = false"></div>
+      <div class="bg-white rounded-3xl shadow-2xl w-full max-w-2xl relative flex flex-col max-h-[90vh]">
+        <div class="p-6 border-b border-slate-100 flex items-center justify-between shrink-0">
+          <h3 class="text-xl font-bold text-slate-900">Subscription Terms & Conditions</h3>
+          <button @click="showTermsModal = false" class="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-500">✕</button>
+        </div>
+        <div class="p-6 overflow-y-auto custom-scrollbar flex-1 text-slate-700 space-y-4 text-sm leading-relaxed">
+          <div>
+            <h4 class="font-bold text-slate-900 text-base mb-1">1. Subscription Overview</h4>
+            <p>By subscribing to Lapadia's plans, you agree to receive automated deliveries based on your selected frequency (weekly or monthly).</p>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-900 text-base mb-1">2. Billing & Payments</h4>
+            <p>Your saved card will be automatically charged at the beginning of each billing cycle. You must ensure sufficient funds are available to avoid delivery interruptions.</p>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-900 text-base mb-1">3. Cancellation Policy</h4>
+            <p>You can cancel your subscription at any time through your account dashboard. Cancellations must be made at least 24 hours before your next scheduled delivery to avoid being charged for that cycle.</p>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-900 text-base mb-1">4. Minimum Commitments</h4>
+            <p>Certain plans (e.g., Parfait - Once monthly) require a minimum commitment period (e.g., 3 months). Early cancellation of these plans may incur a penalty fee.</p>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-900 text-base mb-1">5. Delivery Modifications</h4>
+            <p>If you need to skip a delivery or change your delivery address for a specific cycle, please do so via the dashboard at least 24 hours in advance.</p>
+          </div>
+          <div>
+            <h4 class="font-bold text-slate-900 text-base mb-1">6. Product Availability</h4>
+            <p>In the rare event that a subscribed item is unavailable, we reserve the right to substitute it with a similar product of equal or greater value, after notifying you.</p>
+          </div>
+        </div>
+        <div class="p-6 border-t border-slate-100 bg-slate-50 rounded-b-3xl shrink-0 flex justify-end gap-3">
+          <button @click="showTermsModal = false" class="px-5 py-2.5 rounded-xl font-bold text-slate-600 hover:bg-slate-200 transition-colors">Close</button>
+          <button @click="showTermsModal = false; orderData.acceptedTerms = true" class="px-6 py-2.5 rounded-xl font-bold text-white bg-emerald-600 hover:bg-emerald-500 transition-all shadow-sm">
+            I Understand & Accept
+          </button>
+        </div>
+      </div>
+    </div>
 
     <!-- Swap Products Modal -->
     <div v-if="showSwapModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
@@ -445,6 +491,7 @@ const confirmSwap = () => {
 
 const isAuthenticated = ref(false);
 const showAuthModal = ref(false);
+const showTermsModal = ref(false);
 const isFrequencyDropdownOpen = ref(false);
 
 const promoCodeInput = ref('');
@@ -474,7 +521,8 @@ const orderData = ref({
   saveCard: false,
   saveDeliveryOptions: false,
   isSubscription: false,
-  subscriptionFrequency: 'weekly'
+  subscriptionFrequency: 'weekly',
+  acceptedTerms: false
 });
 
 const minScheduleDate = computed(() => {
@@ -483,13 +531,17 @@ const minScheduleDate = computed(() => {
 });
 
 const isFormValid = computed(() => {
-  return (
+  const baseValid = (
     orderData.value.fullName.trim() !== '' &&
     orderData.value.email.trim() !== '' &&
     orderData.value.phone.trim().length >= 7 &&
     orderData.value.lga !== '' &&
     orderData.value.streetAddress.trim() !== ''
   );
+  if (isSubscriptionCheckout.value) {
+    return baseValid && orderData.value.acceptedTerms;
+  }
+  return baseValid;
 });
 
 onMounted(async () => {

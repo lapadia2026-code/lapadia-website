@@ -1,0 +1,38 @@
+[
+  {
+    "_id": "6aa9de72eaefce89e1d3195c",
+    "id": "6aa9de72eaefce89e1d3195c",
+    "name": "Nuts, Fruits and Granola Parfait 16oz",
+    "description": "Delicious blend of nuts, fruits, and granola.",
+    "price": 8500,
+    "category": "Parfaits",
+    "imageUrl": "/img/product4.jpg"
+  },
+  {
+    "_id": "6aa9de72eaefce89e1d3195d",
+    "id": "6aa9de72eaefce89e1d3195d",
+    "name": "Apple and pineapple parfait 16oz",
+    "description": "Fresh apple and pineapple parfait.",
+    "price": 6500,
+    "category": "Parfaits",
+    "imageUrl": "/img/product5.jpg"
+  },
+  {
+    "_id": "6aa9de72eaefce89e1d3195e",
+    "id": "6aa9de72eaefce89e1d3195e",
+    "name": "Berry bliss (50cl)",
+    "description": "Refreshing berry smoothie.",
+    "price": 7000,
+    "category": "Smoothies",
+    "imageUrl": "/img/product8.jpg"
+  },
+  {
+    "_id": "6aa9de72eaefce89e1d3195f",
+    "id": "6aa9de72eaefce89e1d3195f",
+    "name": "Avocado delight (50cl)",
+    "description": "Creamy avocado smoothie.",
+    "price": 6500,
+    "category": "Smoothies",
+    "imageUrl": "/img/product6.avif"
+  }
+]

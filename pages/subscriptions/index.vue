@@ -1,6 +1,6 @@
 <template>
   <div class="py-6 md:py-10 pb-16 bg-slate-50 min-h-screen">
-    <div class="max-w-7xl mx-auto px-4 text-center">
+    <div class="max-w-7xl mx-auto px-5 md:px-8 text-center">
       <div class="mb-16">
         <h1 class="text-2xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-6">Never run out of essentials.</h1>
         <p class="text-xl text-slate-500 max-w-2xl mx-auto">Choose a plan that fits your household. We'll automatically deliver your groceries exactly when you need them.</p>
@@ -21,13 +21,54 @@
         </div>
       </div>
 
-      <div v-else-if="plans.length > 0" class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto py-10">
+      <!-- Filters -->
+      <div v-if="plans.length > 0 && !loading" class="max-w-4xl mx-auto mb-10 flex flex-col md:flex-row gap-4 justify-center items-center bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
+        <div class="flex flex-col w-full md:w-1/3 text-left">
+          <label class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1 pl-1">Budget</label>
+          <CustomSelect
+            v-model="budgetFilter"
+            :options="[
+              {label: 'All Budgets', value: 'All'},
+              {label: 'Under ₦15,000', value: 'Under ₦15,000'},
+              {label: '₦15,000 - ₦30,000', value: '₦15,000 - ₦30,000'},
+              {label: 'Over ₦30,000', value: 'Over ₦30,000'}
+            ]"
+          />
+        </div>
+        
+        <div class="flex flex-col w-full md:w-1/3 text-left">
+          <label class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1 pl-1">Plan Type</label>
+          <CustomSelect
+            v-model="typeFilter"
+            :options="[
+              {label: 'All Types', value: 'All'},
+              {label: 'Juices & Smoothies', value: 'Juices & Smoothies'},
+              {label: 'Parfaits', value: 'Parfaits'},
+              {label: 'Fruit Bowls', value: 'Fruit Bowls'}
+            ]"
+          />
+        </div>
+
+        <div class="flex flex-col w-full md:w-1/3 text-left">
+          <label class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1 pl-1">Frequency</label>
+          <CustomSelect
+            v-model="frequencyFilter"
+            :options="[
+              {label: 'All Frequencies', value: 'All'},
+              {label: 'Weekly', value: 'Weekly'},
+              {label: 'Monthly', value: 'Monthly'}
+            ]"
+          />
+        </div>
+      </div>
+
+      <div v-if="!loading && filteredPlans.length > 0" class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto py-10">
         <div 
-          v-for="(plan, index) in plans" 
+          v-for="(plan, index) in filteredPlans" 
           :key="plan._id" 
           :class="[ plan.isPopular ? 'bg-slate-900 rounded-3xl p-4 md:p-8 shadow-2xl flex flex-col text-left relative transform md:-translate-y-4' : 'bg-white rounded-3xl p-4 md:p-8 border border-slate-100 shadow-sm flex flex-col text-left' ]"
         >
-          <div v-if="plan.isPopular" class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-blue-600 text-white px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-md">
+          <div v-if="plan.isPopular" class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-blue-600 text-white px-5 md:px-8 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-md">
             Most Popular
           </div>
           
@@ -81,7 +122,14 @@
         </div>
       </div>
       
-      <div v-else class="text-center py-24 bg-white rounded-3xl border border-slate-100 max-w-3xl mx-auto shadow-sm">
+      <div v-else-if="!loading && plans.length > 0 && filteredPlans.length === 0" class="text-center py-24 bg-white rounded-3xl border border-slate-100 max-w-3xl mx-auto shadow-sm">
+        <div class="text-3xl md:text-6xl mb-6">🔍</div>
+        <h3 class="text-2xl font-bold text-slate-900 mb-2">No Plans Match Your Filters</h3>
+        <p class="text-slate-500">Try adjusting your budget, type, or frequency filters to see more options.</p>
+        <button @click="budgetFilter = 'All'; typeFilter = 'All'; frequencyFilter = 'All'" class="mt-6 px-6 py-2 bg-slate-100 text-slate-800 font-bold rounded-xl hover:bg-slate-200 transition-colors">Clear Filters</button>
+      </div>
+
+      <div v-else-if="!loading && plans.length === 0" class="text-center py-24 bg-white rounded-3xl border border-slate-100 max-w-3xl mx-auto shadow-sm">
         <div class="text-3xl md:text-6xl mb-6">📦</div>
         <h3 class="text-2xl font-bold text-slate-900 mb-2">No Plans Available</h3>
         <p class="text-slate-500">We're currently updating our subscription offerings. Check back soon!</p>
@@ -91,13 +139,43 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { GATEWAY_ENDPOINT } from '~/api_factory/axios.config';
 
 const router = useRouter();
 const plans = ref<any[]>([]);
 const loading = ref(true);
+
+const budgetFilter = ref('All');
+const typeFilter = ref('All');
+const frequencyFilter = ref('All');
+
+const filteredPlans = computed(() => {
+  return plans.value.filter(plan => {
+    // Budget
+    if (budgetFilter.value === 'Under ₦15,000' && plan.price >= 15000) return false;
+    if (budgetFilter.value === '₦15,000 - ₦30,000' && (plan.price < 15000 || plan.price > 30000)) return false;
+    if (budgetFilter.value === 'Over ₦30,000' && plan.price <= 30000) return false;
+
+    // Type
+    if (typeFilter.value !== 'All') {
+      const name = plan.name.toLowerCase();
+      if (typeFilter.value === 'Juices & Smoothies' && !name.includes('juice') && !name.includes('smoothie')) return false;
+      if (typeFilter.value === 'Parfaits' && !name.includes('parfait')) return false;
+      if (typeFilter.value === 'Fruit Bowls' && !name.includes('fruit bowl')) return false;
+    }
+
+    // Frequency
+    if (frequencyFilter.value !== 'All') {
+      const freq = plan.frequency.toLowerCase();
+      if (frequencyFilter.value === 'Weekly' && freq !== 'weekly') return false;
+      if (frequencyFilter.value === 'Monthly' && freq !== 'monthly') return false;
+    }
+
+    return true;
+  });
+});
 
 onMounted(async () => {
   try {

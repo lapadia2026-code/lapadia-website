@@ -1,12 +1,12 @@
 <template>
-  <div class="py-6 md:py-10 pb-16 max-w-7xl mx-auto px-4 min-h-screen">
+  <div class="py-6 md:py-10 pb-16 max-w-7xl mx-auto px-5 md:px-8 min-h-screen">
     <h1 class="text-2xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-8">Your Cart</h1>
     
     <div v-if="cart.length === 0" class="text-center py-24 bg-slate-50 rounded-3xl border border-slate-100">
       <div class="text-3xl md:text-6xl mb-4">🛒</div>
       <h2 class="text-2xl font-bold text-slate-900 mb-2">Your cart is empty</h2>
       <p class="text-slate-500 mb-8 max-w-md mx-auto">Looks like you haven't added any fresh groceries to your cart yet.</p>
-      <NuxtLink to="/products" class="px-4 md:px-8 py-4 bg-slate-900 text-white rounded-full font-bold shadow-xl hover:bg-slate-800 transition-colors">
+      <NuxtLink to="/products" class="px-5 md:px-8 md:px-8 py-4 bg-slate-900 text-white rounded-full font-bold shadow-xl hover:bg-slate-800 transition-colors">
         Start Shopping
       </NuxtLink>
     </div>

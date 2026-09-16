@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-7xl mx-auto px-4 py-12">
+  <div class="max-w-7xl mx-auto px-5 md:px-8 py-12">
     <div class="flex flex-col md:flex-row gap-8">
       <!-- Sidebar -->
       <aside class="w-full md:w-64 shrink-0">
@@ -8,16 +8,16 @@
             <h2 class="font-bold text-lg text-slate-900">My Account</h2>
             <p class="text-sm text-slate-500">{{ user?.email || 'customer@lapadia.com' }}</p>
           </div>
-          <NuxtLink to="/account" class="block px-4 py-2 rounded-lg font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
+          <NuxtLink to="/account" class="block px-5 md:px-8 py-2 rounded-lg font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
             Profile Details
           </NuxtLink>
-          <NuxtLink to="/account/orders" class="block px-4 py-2 rounded-lg font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
+          <NuxtLink to="/account/orders" class="block px-5 md:px-8 py-2 rounded-lg font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
             Order History
           </NuxtLink>
-          <NuxtLink to="/account/subscriptions" class="block px-4 py-2 rounded-lg font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
+          <NuxtLink to="/account/subscriptions" class="block px-5 md:px-8 py-2 rounded-lg font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
             My Subscriptions
           </NuxtLink>
-          <button @click="showLogoutModal = true" class="w-full text-left mt-4 block px-4 py-2 rounded-lg font-medium text-rose-600 hover:bg-rose-50 transition-colors">
+          <button @click="showLogoutModal = true" class="w-full text-left mt-4 block px-5 md:px-8 py-2 rounded-lg font-medium text-rose-600 hover:bg-rose-50 transition-colors">
             Logout
           </button>
         </div>
@@ -58,15 +58,15 @@
         <form @submit.prevent="updateProfile" class="space-y-6 max-w-lg">
           <div class="space-y-2">
             <label class="text-sm font-medium text-slate-700">Full Name</label>
-            <input type="text" v-model="form.name" required class="w-full px-4 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors" />
+            <input type="text" v-model="form.name" required class="w-full px-5 md:px-8 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors" />
           </div>
           <div class="space-y-2">
             <label class="text-sm font-medium text-slate-700">Email Address</label>
-            <input type="email" :value="user?.email || 'customer@lapadia.com'" disabled class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-500 cursor-not-allowed" />
+            <input type="email" :value="user?.email || 'customer@lapadia.com'" disabled class="w-full px-5 md:px-8 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-500 cursor-not-allowed" />
           </div>
           <div class="space-y-2">
             <label class="text-sm font-medium text-slate-700">Phone Number</label>
-            <input type="tel" v-model="form.phone" placeholder="Enter your phone number" class="w-full px-4 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors" />
+            <input type="tel" v-model="form.phone" placeholder="Enter your phone number" class="w-full px-5 md:px-8 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors" />
           </div>
           
           <div class="pt-6 border-t border-slate-100">
@@ -83,8 +83,8 @@
             </div>
             
             <div class="flex gap-2">
-              <input type="text" v-model="newAddress" placeholder="Enter a new address..." class="flex-1 px-4 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors text-sm" @keydown.enter.prevent="addAddress" />
-              <button type="button" @click="addAddress" class="px-4 py-2.5 bg-slate-100 text-slate-700 font-medium rounded-xl hover:bg-slate-200 transition-colors text-sm">
+              <input type="text" v-model="newAddress" placeholder="Enter a new address..." class="flex-1 px-5 md:px-8 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors text-sm" @keydown.enter.prevent="addAddress" />
+              <button type="button" @click="addAddress" class="px-5 md:px-8 py-2.5 bg-slate-100 text-slate-700 font-medium rounded-xl hover:bg-slate-200 transition-colors text-sm">
                 Add
               </button>
             </div>

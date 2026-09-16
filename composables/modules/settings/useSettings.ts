@@ -1,15 +1,14 @@
 import { ref } from 'vue';
-import { useNuxtApp } from '#app';
+import { GATEWAY_ENDPOINT } from '~/api_factory/axios.config';
 
 export const useSettings = () => {
-  const { $api } = useNuxtApp();
   const loading = ref(false);
   const settings = ref({ expressDeliveryFee: 1500 });
 
   const getSettings = async () => {
     loading.value = true;
     try {
-      const response = await $api.get('/settings');
+      const response = await GATEWAY_ENDPOINT.get('/settings');
       settings.value = response.data;
     } catch (e: any) {
       console.error('Failed to get settings', e);

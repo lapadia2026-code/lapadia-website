@@ -1,13 +1,9 @@
 <template>
   <div class="min-h-screen flex">
     <!-- Left Section: Branding & Visuals -->
-    <div class="hidden lg:flex lg:w-1/2 bg-blue-600 relative overflow-hidden items-center justify-center">
-      <div class="absolute inset-0 bg-gradient-to-br from-blue-500 to-blue-800 opacity-90 z-0"></div>
-      <!-- Decorative Elements -->
-      <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
-        <div class="absolute -top-24 -left-24 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
-        <div class="absolute bottom-0 right-0 w-[500px] h-[500px] bg-blue-400/20 rounded-full blur-3xl translate-x-1/3 translate-y-1/3"></div>
-      </div>
+    <div class="hidden lg:flex lg:w-1/2 relative overflow-hidden items-center justify-center bg-slate-900">
+      <img src="/img/auth-bg.jpg" class="absolute inset-0 w-full h-full object-cover z-0" alt="Enjoying Lapadia Fresh" />
+      <div class="absolute inset-0 bg-gradient-to-b from-slate-900/40 to-blue-900/60 z-0"></div>
       
       <div class="relative z-10 p-6 md:p-12 max-w-lg text-white">
         <div class="mb-8 flex items-center gap-3">
@@ -45,7 +41,7 @@
         <button 
           @click="handleGoogleLogin" 
           :disabled="googleLoading"
-          class="w-full flex items-center justify-center gap-3 bg-white border-2 border-slate-200 py-3.5 px-4 rounded-xl text-slate-700 font-bold hover:bg-slate-50 hover:border-slate-300 focus:outline-none focus:ring-4 focus:ring-slate-100 transition-all active:scale-[0.98] disabled:opacity-70"
+          class="w-full flex items-center justify-center gap-3 bg-white border-2 border-slate-200 py-3.5 px-5 md:px-8 rounded-xl text-slate-700 font-bold hover:bg-slate-50 hover:border-slate-300 focus:outline-none focus:ring-4 focus:ring-slate-100 transition-all active:scale-[0.98] disabled:opacity-70"
         >
           <svg v-if="!googleLoading" class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -67,20 +63,20 @@
           <div>
             <label for="name" class="block text-sm font-bold text-slate-700 mb-1.5">Full Name</label>
             <input id="name" name="name" type="text" required v-model="form.name"
-              class="appearance-none block w-full px-4 py-3.5 bg-white border border-slate-200 text-slate-900 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 sm:text-sm font-medium transition-all"
+              class="appearance-none block w-full px-5 md:px-8 py-3.5 bg-white border border-slate-200 text-slate-900 rounded-xl focus:outline-none focus:ring-1 focus:ring-blue-500/50 focus:border-blue-500 sm:text-sm font-medium transition-all"
               placeholder="John Doe" />
           </div>
           <div>
             <label for="email-address" class="block text-sm font-bold text-slate-700 mb-1.5">Email Address</label>
             <input id="email-address" name="email" type="email" autocomplete="email" required v-model="form.email"
-              class="appearance-none block w-full px-4 py-3.5 bg-white border border-slate-200 text-slate-900 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 sm:text-sm font-medium transition-all"
+              class="appearance-none block w-full px-5 md:px-8 py-3.5 bg-white border border-slate-200 text-slate-900 rounded-xl focus:outline-none focus:ring-1 focus:ring-blue-500/50 focus:border-blue-500 sm:text-sm font-medium transition-all"
               placeholder="you@example.com" />
           </div>
           <div>
             <label for="password" class="block text-sm font-bold text-slate-700 mb-1.5">Password</label>
             <div class="relative">
               <input id="password" name="password" :type="showPassword ? 'text' : 'password'" required v-model="form.password"
-                class="appearance-none block w-full px-4 py-3.5 pr-12 bg-white border border-slate-200 text-slate-900 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 sm:text-sm font-medium transition-all"
+                class="appearance-none block w-full px-5 md:px-8 py-3.5 pr-12 bg-white border border-slate-200 text-slate-900 rounded-xl focus:outline-none focus:ring-1 focus:ring-blue-500/50 focus:border-blue-500 sm:text-sm font-medium transition-all"
                 placeholder="••••••••" />
               <button type="button" @click="showPassword = !showPassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none">
                 <svg v-if="!showPassword" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -96,7 +92,7 @@
 
           <div class="pt-2">
             <button type="submit" :disabled="loading"
-              class="group relative w-full flex justify-center py-4 px-4 border border-transparent text-sm font-black rounded-xl text-white bg-slate-900 hover:bg-slate-800 focus:outline-none focus:ring-4 focus:ring-slate-900/20 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:scale-[0.98] disabled:opacity-50 disabled:hover:translate-y-0">
+              class="group relative w-full flex justify-center py-4 px-5 md:px-8 border border-transparent text-sm font-black rounded-xl text-white bg-slate-900 hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900/20 transition-all hover:-translate-y-0.5 active:scale-[0.98] disabled:opacity-50 disabled:hover:translate-y-0">
               <span v-if="loading" class="absolute left-4 w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
               <span v-if="loading">Creating Account...</span>
               <span v-else>Register Account</span>

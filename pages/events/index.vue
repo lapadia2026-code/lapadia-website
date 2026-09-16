@@ -7,7 +7,7 @@
         <div class="absolute bottom-10 left-10 w-96 h-96 rounded-full bg-yellow-200/20 blur-3xl"></div>
       </div>
       <div class="max-w-6xl mx-auto px-6 py-20 md:py-28 relative z-10">
-        <div class="inline-block bg-white/20 backdrop-blur-sm rounded-full px-4 py-1.5 text-sm font-bold mb-4 tracking-wide">
+        <div class="inline-block bg-white/20 backdrop-blur-sm rounded-full px-5 md:px-8 py-1.5 text-sm font-bold mb-4 tracking-wide">
           🎉 Community & Culture
         </div>
         <h1 class="text-xl md:text-3xl md:text-6xl font-black tracking-tight mb-4" >

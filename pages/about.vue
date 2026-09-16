@@ -1,5 +1,5 @@
 <template>
-  <div class="py-8 md:py-12 max-w-5xl mx-auto px-4">
+  <div class="py-8 md:py-12 max-w-5xl mx-auto px-5 md:px-8">
     <!-- Hero Section -->
     <div class="text-center mb-10 md:mb-16">
       <h1 class="text-2xl md:text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Redefining Grocery Delivery</h1>

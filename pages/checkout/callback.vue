@@ -1,5 +1,5 @@
 <template>
-  <div class="py-6 md:py-10 pb-16 max-w-2xl mx-auto px-4 min-h-screen">
+  <div class="py-6 md:py-10 pb-16 max-w-2xl mx-auto px-5 md:px-8 min-h-screen">
     <div v-if="loading" class="bg-white p-4 md:p-8 rounded-3xl border border-slate-100 shadow-xl flex flex-col items-center justify-center text-center animate-pulse">
       <div class="w-24 h-24 bg-slate-200 rounded-full mb-6"></div>
       <div class="h-8 bg-slate-200 rounded w-1/2 mb-4"></div>
@@ -13,7 +13,7 @@
       </div>
       <h1 class="text-2xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">Payment Successful!</h1>
       <p class="text-lg text-slate-500 mb-8">Your order has been confirmed and is now being processed. You will receive an email confirmation shortly.</p>
-      <NuxtLink to="/products" class="inline-block px-4 md:px-8 py-4 bg-slate-900 text-white rounded-full font-bold shadow-xl hover:bg-slate-800 transition-colors">
+      <NuxtLink to="/products" class="inline-block px-5 md:px-8 md:px-8 py-4 bg-slate-900 text-white rounded-full font-bold shadow-xl hover:bg-slate-800 transition-colors">
         Continue Shopping
       </NuxtLink>
     </div>
@@ -24,7 +24,7 @@
       </div>
       <h1 class="text-xl md:text-3xl font-bold text-slate-900 tracking-tight mb-4">Payment Verification Failed</h1>
       <p class="text-slate-500 mb-8">We could not verify your payment. If you were charged, please contact support.</p>
-      <NuxtLink to="/cart" class="inline-block px-4 md:px-8 py-4 bg-slate-900 text-white rounded-full font-bold shadow-xl hover:bg-slate-800 transition-colors">
+      <NuxtLink to="/cart" class="inline-block px-5 md:px-8 md:px-8 py-4 bg-slate-900 text-white rounded-full font-bold shadow-xl hover:bg-slate-800 transition-colors">
         Return to Cart
       </NuxtLink>
     </div>

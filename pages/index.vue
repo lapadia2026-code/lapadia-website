@@ -7,13 +7,9 @@
     </transition>
 
     <!-- Hero Section -->
-    <section class="relative pt-24 lg:pt-32 pb-20 max-w-[1400px] mx-auto px-4 md:px-12 lg:px-20 z-10 min-h-[800px]">
+    <section class="relative pt-24 lg:pt-32 pb-20 max-w-[1400px] mx-auto px-5 md:px-8 lg:px-20 z-10 min-h-[800px]">
       
-      <div v-if="loading" class="flex items-center justify-center h-96">
-        <div class="w-12 h-12 border-4 border-[#FFCD42] border-t-transparent rounded-full animate-spin"></div>
-      </div>
-
-      <div v-else-if="activeProduct" class="flex flex-col lg:flex-row items-center justify-between">
+      <div v-if="activeProduct" class="flex flex-col lg:flex-row items-center justify-between">
         
         <!-- Left Content -->
         <div class="w-full lg:w-1/2 pr-0 lg:pr-12 relative z-20">
@@ -123,7 +119,7 @@
 
     <!-- Explore Products Section -->
     <section class="py-24 bg-white relative z-10 rounded-t-[3rem] shadow-[0_-20px_40px_rgba(0,0,0,0.03)] mt-12">
-      <div class="max-w-[1400px] mx-auto px-4 md:px-12 lg:px-20">
+      <div class="max-w-[1400px] mx-auto px-5 md:px-4 md:px-12 lg:px-20">
         <div class="flex flex-col md:flex-row items-end justify-between mb-12 gap-4">
           <div>
             <div class="text-[#FFCD42] font-black tracking-wider uppercase text-sm mb-2">Our Menu</div>
@@ -186,6 +182,8 @@
       </div>
     </section>
 
+    <!-- Welcome Modal -->
+    <WelcomeSubscriptionModal />
   </div>
 </template>
 
@@ -194,6 +192,7 @@ import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useGetProducts } from '~/composables/modules/products/useGetProducts';
 import { useCart } from '~/composables/modules/cart/useCart';
 import { useFavorites } from '~/composables/modules/favorites/useFavorites';
+import WelcomeSubscriptionModal from '~/components/WelcomeSubscriptionModal.vue';
 
 const { loading, error, products, getProducts } = useGetProducts();
 const { addToCart } = useCart();
@@ -210,11 +209,10 @@ useSeoMeta({
 const activeIndex = ref(0);
 let carouselInterval: any = null;
 
+import heroData from '~/data/hero-products.json';
+
 // Product subsets
-const heroProducts = computed(() => {
-  // Use first 4 products for the carousel, or less if not enough
-  return products.value?.slice(0, 4) || [];
-});
+const heroProducts = ref(heroData);
 
 const activeProduct = computed(() => {
   if (!heroProducts.value.length) return null;
@@ -246,14 +244,17 @@ const activeColor = computed(() => {
 
 // Map specific products to our custom AI generated images
 const getHeroImage = (product: any) => {
+  // If the product has a database image URL, prioritize it
+  if (product.imageUrl) return product.imageUrl;
+  
   const name = product.name.toLowerCase();
   if (name.includes('orange') || name.includes('citrus')) return '/images/hero_orange.jpg';
   if (name.includes('green') || name.includes('kale') || name.includes('spinach')) return '/images/hero_green.jpg';
   if (name.includes('apple')) return '/images/thumb_apple.jpg';
   if (name.includes('lemon')) return '/images/thumb_lemon.jpg';
-  if (name.includes('berry') || name.includes('strawberry') || name.includes('acai')) return '/images/thumb_apple.jpg'; // Fallback to apple (red)
+  if (name.includes('berry') || name.includes('strawberry') || name.includes('acai')) return '/images/thumb_apple.jpg';
   
-  return product.imageUrl || '/images/hero_orange.jpg'; // Fallback
+  return '/images/hero_orange.jpg'; // Ultimate Fallback
 };
 
 // Carousel Controls

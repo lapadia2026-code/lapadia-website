@@ -90,7 +90,7 @@
             <div v-if="product.ingredients && product.ingredients.length > 0">
               <h3 class="text-sm font-bold text-slate-900 uppercase tracking-widest mb-3">Made With</h3>
               <div class="flex flex-wrap gap-2">
-                <span v-for="ingredient in product.ingredients" :key="ingredient" class="bg-white/60 border border-slate-200 text-slate-700 px-4 py-2 rounded-lg text-sm font-semibold shadow-sm backdrop-blur-sm">
+                <span v-for="ingredient in product.ingredients" :key="ingredient" class="bg-white/60 border border-slate-200 text-slate-700 px-5 md:px-8 py-2 rounded-lg text-sm font-semibold shadow-sm backdrop-blur-sm">
                   {{ ingredient }}
                 </span>
               </div>
@@ -108,7 +108,7 @@
       </div>
 
       <!-- Redesigned Nutrition Facts -->
-      <div v-if="product && product.nutritionalInfo" class="mt-20 max-w-4xl">
+      <!-- <div v-if="product && product.nutritionalInfo" class="mt-20 max-w-4xl">
         <div class="flex items-end justify-between border-b border-slate-200 pb-4 mb-8">
           <h2 class="text-xl md:text-3xl font-black text-slate-900">Nutrition Profile</h2>
           <p class="text-sm font-bold text-slate-500 uppercase tracking-wider">Per {{ product.nutritionalInfo.servingSize || '450ml' }}</p>
@@ -150,7 +150,7 @@
             <div class="text-xs font-bold text-slate-400 uppercase tracking-widest">Sugar</div>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <div v-if="!loading && !product" class="text-center py-24">
         <h2 class="text-xl md:text-3xl font-black text-slate-900 mb-4">Product Not Found</h2>
