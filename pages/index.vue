@@ -7,7 +7,7 @@
     <!-- Hero Section -->
     <section class="relative pt-24 lg:pt-32 pb-20 max-w-[1400px] mx-auto px-5 md:px-8 lg:px-20 z-10 min-h-[800px]">
       
-      <div v-if="activeProduct" class="flex flex-col lg:flex-row items-center justify-between">
+      <div v-if="activeProduct" class="flex flex-col-reverse lg:flex-row items-center justify-between gap-12 lg:gap-0">
         
         <!-- Left Content -->
         <div class="w-full lg:w-1/2 pr-0 lg:pr-12 relative z-20">
@@ -81,40 +81,41 @@
             </transition-group>
           </div>
           
-          <!-- Carousel Indicators -->
-          <div class="flex gap-2 mt-8">
-            <button 
-              v-for="(_, index) in heroProducts" 
-              :key="index"
-              @click="setActiveIndex(index)"
-              class="h-2 rounded-full transition-all duration-500"
-              :class="activeIndex === index ? 'w-10 bg-slate-900' : 'w-2 bg-slate-300 hover:bg-slate-400'"
-            ></button>
-          </div>
         </div>
         
         <!-- Right Image (Hero Bottle) -->
-        <div class="w-full lg:w-1/2 relative mt-16 lg:mt-0 z-10 flex justify-center lg:justify-end min-h-[500px]">
-          <div class="relative w-[100%] max-w-[650px] flex justify-center">
+        <div class="w-full lg:w-1/2 relative z-10 flex flex-col items-center lg:items-end min-h-[400px] lg:min-h-[500px]">
+          <div class="relative w-[100%] max-w-[550px] flex justify-center">
             <img 
               v-for="(product, index) in heroProducts"
               :key="'img-'+(product._id || product.id)"
               :src="getHeroImage(product)" 
               :alt="product.name" 
-              class="absolute top-0 left-0 w-full h-full object-contain mix-blend-multiply filter drop-shadow-2xl animate-float transition-opacity duration-700 ease-in-out"
+              class="absolute top-0 left-0 w-full h-full object-cover rounded-[2.5rem] shadow-2xl animate-float transition-opacity duration-700 ease-in-out"
               :class="activeIndex === index ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'"
             />
             <!-- Placeholder to maintain correct height -->
             <img 
               v-if="heroProducts.length > 0"
               :src="getHeroImage(heroProducts[0])" 
-              class="w-full h-auto object-contain opacity-0 pointer-events-none" 
+              class="w-full h-auto object-cover rounded-[2.5rem] opacity-0 pointer-events-none" 
               alt="placeholder" 
             />
           </div>
           
+          <!-- Carousel Indicators -->
+          <div class="flex gap-3 mt-8 lg:mt-10 lg:pr-12 justify-center w-full lg:justify-end">
+            <button 
+              v-for="(_, index) in heroProducts" 
+              :key="'ind-'+index"
+              @click="setActiveIndex(index)"
+              class="h-2.5 rounded-full transition-all duration-500 shadow-sm"
+              :class="activeIndex === index ? 'w-10 bg-slate-900' : 'w-2.5 bg-slate-300 hover:bg-slate-400'"
+            ></button>
+          </div>
+
           <!-- Small text callout -->
-          <div class="absolute bottom-10 -left-10 lg:left-0 bg-white/80 backdrop-blur-sm p-4 rounded-xl border border-white/50 shadow-xl max-w-[220px] hidden md:block">
+          <div class="absolute bottom-20 -left-6 lg:left-0 bg-white/90 backdrop-blur-md p-4 rounded-2xl border border-white/50 shadow-xl max-w-[220px] hidden md:block z-20">
             <p class="text-sm font-bold text-slate-800 leading-tight">
               Freshly Blended From The Choicest Fruits. No Preservatives, Just Pure Nature.
             </p>
