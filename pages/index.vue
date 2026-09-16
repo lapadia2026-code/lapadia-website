@@ -2,9 +2,7 @@
   <div class="bg-[#F9F6F0] min-h-screen overflow-hidden font-sans relative">
     
     <!-- Dynamic Split Background -->
-    <transition name="fade" mode="out-in">
-      <div :key="activeColor" class="absolute top-0 right-0 w-1/3 h-[900px] hidden lg:block z-0 rounded-bl-[100px] transition-colors duration-1000" :style="{ backgroundColor: activeColor }"></div>
-    </transition>
+    <div class="absolute top-0 right-0 w-1/3 h-[900px] hidden lg:block z-0 rounded-bl-[100px] transition-colors duration-1000" :style="{ backgroundColor: activeColor }"></div>
 
     <!-- Hero Section -->
     <section class="relative pt-24 lg:pt-32 pb-20 max-w-[1400px] mx-auto px-5 md:px-8 lg:px-20 z-10 min-h-[800px]">
