@@ -97,14 +97,23 @@
         
         <!-- Right Image (Hero Bottle) -->
         <div class="w-full lg:w-1/2 relative mt-16 lg:mt-0 z-10 flex justify-center lg:justify-end min-h-[500px]">
-          <transition name="fade" mode="out-in">
+          <div class="relative w-[100%] max-w-[650px] flex justify-center">
             <img 
-              :key="activeProduct._id || activeProduct.id"
-              :src="getHeroImage(activeProduct)" 
-              :alt="activeProduct.name" 
-              class="w-[100%] max-w-[650px] h-auto object-contain mix-blend-multiply filter drop-shadow-2xl animate-float" 
+              v-for="(product, index) in heroProducts"
+              :key="'img-'+(product._id || product.id)"
+              :src="getHeroImage(product)" 
+              :alt="product.name" 
+              class="absolute top-0 left-0 w-full h-full object-contain mix-blend-multiply filter drop-shadow-2xl animate-float transition-opacity duration-700 ease-in-out"
+              :class="activeIndex === index ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'"
             />
-          </transition>
+            <!-- Placeholder to maintain correct height -->
+            <img 
+              v-if="heroProducts.length > 0"
+              :src="getHeroImage(heroProducts[0])" 
+              class="w-full h-auto object-contain opacity-0 pointer-events-none" 
+              alt="placeholder" 
+            />
+          </div>
           
           <!-- Small text callout -->
           <div class="absolute bottom-10 -left-10 lg:left-0 bg-white/80 backdrop-blur-sm p-4 rounded-xl border border-white/50 shadow-xl max-w-[220px] hidden md:block">
