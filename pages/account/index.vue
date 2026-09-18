@@ -97,7 +97,7 @@
             </div>
           </div>
           
-          <button :disabled="saving" class="px-6 py-2.5 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50 mt-6">
+          <button type="submit" @click.prevent="updateProfile" :disabled="saving" class="px-6 py-2.5 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50 mt-6">
             {{ saving ? 'Saving...' : 'Save Changes' }}
           </button>
         </form>
