@@ -163,23 +163,32 @@
                 </svg>
               </button>
 
-              <NuxtLink :to="`/products/${product._id || product.id}`" class="block">
+              <NuxtLink v-if="product.stock > 0" :to="`/products/${product._id || product.id}`" class="block">
                 <div class="relative w-full h-48 bg-white rounded-2xl mb-5 overflow-hidden flex items-center justify-center text-3xl md:text-5xl group-hover:scale-95 transition-transform duration-500 shadow-sm border border-slate-100 mix-blend-multiply">
                   <img :src="getHeroImage(product)" :alt="product.name" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                 </div>
               </NuxtLink>
+              <div v-else class="block opacity-75 cursor-not-allowed">
+                <div class="relative w-full h-48 bg-white rounded-2xl mb-5 overflow-hidden flex items-center justify-center text-3xl md:text-5xl group-hover:scale-95 transition-transform duration-500 shadow-sm border border-slate-100 mix-blend-multiply">
+                  <div class="absolute top-2 left-2 z-10 bg-rose-500 text-white text-xs font-bold px-2 py-1 rounded">Out of Stock</div>
+                  <img :src="getHeroImage(product)" :alt="product.name" class="w-full h-full object-cover grayscale group-hover:scale-110 transition-transform duration-700" />
+                </div>
+              </div>
               
               <div class="px-2 pb-2 flex-1 flex flex-col">
                 <div class="text-xs font-bold text-[#FFCD42] uppercase tracking-widest mb-1.5">{{ product.category || 'Smoothie' }}</div>
-                <NuxtLink :to="`/products/${product._id || product.id}`" class="block hover:text-[#FFCD42] transition-colors mb-3">
+                <NuxtLink v-if="product.stock > 0" :to="`/products/${product._id || product.id}`" class="block hover:text-[#FFCD42] transition-colors mb-3">
                   <h3 class="font-black text-slate-900 text-xl leading-tight line-clamp-2">{{ product.name }}</h3>
                 </NuxtLink>
+                <div v-else class="block mb-3">
+                  <h3 class="font-black text-slate-500 text-xl leading-tight line-clamp-2">{{ product.name }}</h3>
+                </div>
                 
                 <div class="mt-auto flex items-end justify-between pt-4">
                   <div>
-                    <span class="text-2xl font-black text-slate-900">₦{{ product.price?.toLocaleString() }}</span>
+                    <span class="text-2xl font-black" :class="product.stock > 0 ? 'text-slate-900' : 'text-slate-400 line-through'">₦{{ product.price?.toLocaleString() }}</span>
                   </div>
-                  <button @click.prevent="addToCart(product, 1)" class="w-12 h-12 bg-[#FFCD42] text-slate-900 rounded-full flex items-center justify-center hover:bg-slate-900 hover:text-white transition-colors hover:scale-105 active:scale-95 shadow-lg group-hover:-translate-y-1 font-black text-xl">
+                  <button :disabled="product.stock <= 0" @click.prevent="addToCart(product, 1)" class="w-12 h-12 bg-[#FFCD42] text-slate-900 rounded-full flex items-center justify-center hover:bg-slate-900 hover:text-white transition-colors hover:scale-105 active:scale-95 shadow-lg group-hover:-translate-y-1 font-black text-xl disabled:bg-slate-300 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:shadow-none disabled:group-hover:translate-y-0 disabled:text-slate-500">
                     +
                   </button>
                 </div>

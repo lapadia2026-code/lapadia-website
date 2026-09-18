@@ -57,7 +57,7 @@
               <span class="text-xl md:text-3xl font-extrabold text-slate-900">₦{{ Number(cartTotal).toLocaleString() }}</span>
             </div>
           </div>
-          <NuxtLink to="/checkout" class="block w-full py-4 text-center bg-blue-600 text-white rounded-full font-bold text-lg hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/30">
+          <NuxtLink to="/checkout" class="block w-full py-3 text-center bg-blue-600 text-white rounded-full font-semibold text-base hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/30">
             Proceed to Checkout
           </NuxtLink>
         </div>

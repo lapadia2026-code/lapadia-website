@@ -94,18 +94,31 @@
             Delivery Options
           </h2>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <label :class="['relative flex flex-col p-6 rounded-2xl cursor-pointer transition-all border-2', orderData.deliveryTime === 'standard' ? 'border-emerald-500 bg-emerald-50/50' : 'border-slate-200 hover:border-emerald-200 bg-white']">
-              <input v-model="orderData.deliveryTime" value="standard" type="radio" name="delivery_time" class="absolute right-5 top-5 text-emerald-600 focus:ring-emerald-500 w-5 h-5 border-slate-300" />
-              <span class="font-extrabold text-slate-900 mb-1 text-lg">Standard Delivery</span>
-              <span class="text-sm text-slate-500 font-medium">Delivered within 24-48 hours</span>
+            <label :class="['relative flex flex-col p-6 rounded-2xl cursor-pointer transition-all border-2', orderData.deliveryMethod === 'pickup' ? 'border-emerald-500 bg-emerald-50/50' : 'border-slate-200 hover:border-emerald-200 bg-white']">
+              <input v-model="orderData.deliveryMethod" value="pickup" type="radio" name="delivery_method" class="absolute right-5 top-5 text-emerald-600 focus:ring-emerald-500 w-5 h-5 border-slate-300" />
+              <span class="font-extrabold text-slate-900 mb-1 text-lg">Pickup</span>
+              <span class="text-sm text-slate-500 font-medium">Pick up your order in-store</span>
               <span class="mt-4 text-sm font-bold text-emerald-600 bg-emerald-100 w-fit px-3 py-1 rounded-md">Free</span>
             </label>
-            <label :class="['relative flex flex-col p-6 rounded-2xl cursor-pointer transition-all border-2', orderData.deliveryTime === 'express' ? 'border-emerald-500 bg-emerald-50/50' : 'border-slate-200 hover:border-emerald-200 bg-white']">
-              <input v-model="orderData.deliveryTime" value="express" type="radio" name="delivery_time" class="absolute right-5 top-5 text-emerald-600 focus:ring-emerald-500 w-5 h-5 border-slate-300" />
-              <span class="font-extrabold text-slate-900 mb-1 text-lg">Express Delivery</span>
-              <span class="text-sm text-slate-500 font-medium">Delivered within 2 hours</span>
-              <span class="mt-4 text-sm font-bold text-slate-700 bg-slate-100 w-fit px-3 py-1 rounded-md">+₦{{ settings.expressDeliveryFee?.toLocaleString() || '1,500' }}</span>
+            <label :class="['relative flex flex-col p-6 rounded-2xl cursor-pointer transition-all border-2', orderData.deliveryMethod === 'delivery' ? 'border-emerald-500 bg-emerald-50/50' : 'border-slate-200 hover:border-emerald-200 bg-white']">
+              <input v-model="orderData.deliveryMethod" value="delivery" type="radio" name="delivery_method" class="absolute right-5 top-5 text-emerald-600 focus:ring-emerald-500 w-5 h-5 border-slate-300" />
+              <span class="font-extrabold text-slate-900 mb-1 text-lg">Delivery</span>
+              <span class="text-sm text-slate-500 font-medium">Have it delivered to your address</span>
+              <span class="mt-4 text-xs font-bold text-slate-600 bg-slate-100 w-full px-3 py-2 rounded-md leading-snug">
+                Delivery cost would be incurred by the customer and paid to the dispatch rider on arrival.
+              </span>
             </label>
+          </div>
+          
+          <!-- Order Notes -->
+          <div class="mt-8 pt-6 border-t border-slate-100">
+            <label class="block text-sm font-bold text-slate-700 mb-2">Order Notes <span class="text-slate-400 font-normal">(Optional)</span></label>
+            <textarea 
+              v-model="orderData.orderNotes"
+              rows="3"
+              class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all resize-none text-sm"
+              placeholder="Add any additional information for the vendor..."
+            ></textarea>
           </div>
 
           <!-- Scheduled Time Picker -->
@@ -288,11 +301,11 @@
             <div class="border-t border-slate-100 py-6">
               <label class="text-sm font-bold text-slate-700 block mb-2">Have a Promo Code?</label>
               <div class="flex gap-2">
-                <input v-model="promoCodeInput" :disabled="!!appliedPromo" type="text" class="flex-1 px-5 md:px-8 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all uppercase font-mono" placeholder="ENTER CODE" />
-                <button v-if="!appliedPromo" @click="applyPromo" :disabled="!promoCodeInput || validatingPromo" type="button" class="bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white px-5 md:px-8 py-2 rounded-lg font-bold transition-colors">
+                <input v-model="promoCodeInput" :disabled="!!appliedPromo" type="text" class="flex-1 min-w-0 px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all uppercase font-mono text-sm" placeholder="ENTER CODE" />
+                <button v-if="!appliedPromo" @click="applyPromo" :disabled="!promoCodeInput || validatingPromo" type="button" class="bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white px-4 py-2 rounded-lg font-bold transition-colors text-sm shrink-0">
                   {{ validatingPromo ? '...' : 'Apply' }}
                 </button>
-                <button v-else @click="removePromo" type="button" class="bg-rose-100 hover:bg-rose-200 text-rose-600 px-5 md:px-8 py-2 rounded-lg font-bold transition-colors">
+                <button v-else @click="removePromo" type="button" class="bg-rose-100 hover:bg-rose-200 text-rose-600 px-4 py-2 rounded-lg font-bold transition-colors text-sm shrink-0">
                   Remove
                 </button>
               </div>
@@ -308,7 +321,7 @@
               </div>
               <div class="flex justify-between text-slate-500 text-sm font-medium">
                 <span>Delivery Fee</span>
-                <span class="text-slate-900">{{ orderData.deliveryTime === 'express' ? `₦${settings.expressDeliveryFee?.toLocaleString() || '1,500'}` : 'Free' }}</span>
+                <span class="text-slate-900">Paid on Arrival</span>
               </div>
               <div v-if="appliedPromo" class="flex justify-between text-emerald-600 text-sm font-bold">
                 <span>Discount ({{ appliedPromo.code }})</span>
@@ -515,7 +528,8 @@ const orderData = ref({
   lga: '',
   streetAddress: '',
   landmark: '',
-  deliveryTime: 'standard',
+  deliveryMethod: 'delivery',
+  orderNotes: '',
   scheduledDate: '',
   scheduledSlot: '',
   saveCard: false,
@@ -625,8 +639,7 @@ const discountAmount = computed(() => {
 
 const finalTotal = computed(() => {
   let baseTotal = isSubscriptionCheckout.value && subscriptionPlan.value ? subscriptionPlan.value.price : cartTotal.value;
-  let totalWithDelivery = orderData.value.deliveryTime === 'express' ? baseTotal + (settings.value.expressDeliveryFee || 1500) : baseTotal;
-  return Math.max(0, totalWithDelivery - discountAmount.value);
+  return Math.max(0, baseTotal - discountAmount.value);
 });
 
 const handleCheckout = async () => {

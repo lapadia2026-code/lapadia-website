@@ -68,20 +68,24 @@
             {{ product.description }}
           </p>
           
+          <div v-if="product.stock <= 0" class="mb-6 inline-flex items-center px-3 py-1 rounded-full bg-rose-100 text-rose-700 text-sm font-bold">
+            Out of Stock
+          </div>
+
           <!-- Actions -->
           <div class="flex flex-wrap items-center gap-4 mb-12">
             <!-- Quantity Selector -->
-            <div class="flex items-center border border-slate-300 rounded-xl bg-white shadow-sm overflow-hidden h-14">
+            <div class="flex items-center border border-slate-300 rounded-xl bg-white shadow-sm overflow-hidden h-14" :class="{ 'opacity-50 pointer-events-none': product.stock <= 0 }">
               <button @click="quantity > 1 ? quantity-- : null" class="w-14 h-full flex items-center justify-center text-slate-400 hover:text-slate-900 hover:bg-slate-50 font-medium text-2xl transition-colors">-</button>
               <span class="w-12 text-center font-bold text-slate-900 text-lg">{{ quantity }}</span>
               <button @click="quantity++" class="w-14 h-full flex items-center justify-center text-slate-400 hover:text-slate-900 hover:bg-slate-50 font-medium text-xl transition-colors">+</button>
             </div>
             
             <!-- Add to Cart Button (Refined) -->
-            <button @click="handleAddToCart" class="h-14 px-8 bg-slate-900 text-white rounded-xl font-bold text-lg hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center gap-3">
-              <span>Add to Cart</span>
-              <span class="w-1 h-1 rounded-full bg-slate-600"></span>
-              <span class="text-slate-300 text-sm">₦{{ (product.price * quantity).toLocaleString() }}</span>
+            <button @click="handleAddToCart" :disabled="product.stock <= 0" class="h-14 px-8 bg-slate-900 text-white rounded-xl font-bold text-lg hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center gap-3 disabled:bg-slate-400 disabled:cursor-not-allowed disabled:shadow-none disabled:hover:translate-y-0">
+              <span>{{ product.stock > 0 ? 'Add to Cart' : 'Out of Stock' }}</span>
+              <span v-if="product.stock > 0" class="w-1 h-1 rounded-full bg-slate-600"></span>
+              <span v-if="product.stock > 0" class="text-slate-300 text-sm">₦{{ (product.price * quantity).toLocaleString() }}</span>
             </button>
           </div>
 

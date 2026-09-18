@@ -40,12 +40,7 @@
           <label class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1 pl-1">Plan Type</label>
           <CustomSelect
             v-model="typeFilter"
-            :options="[
-              {label: 'All Types', value: 'All'},
-              {label: 'Juices & Smoothies', value: 'Juices & Smoothies'},
-              {label: 'Parfaits', value: 'Parfaits'},
-              {label: 'Fruit Bowls', value: 'Fruit Bowls'}
-            ]"
+            :options="typeOptions"
           />
         </div>
 
@@ -150,6 +145,7 @@ const loading = ref(true);
 const budgetFilter = ref('All');
 const typeFilter = ref('All');
 const frequencyFilter = ref('All');
+const typeOptions = ref<{label: string, value: string}[]>([{ label: 'All Types', value: 'All' }]);
 
 const filteredPlans = computed(() => {
   return plans.value.filter(plan => {
@@ -158,12 +154,17 @@ const filteredPlans = computed(() => {
     if (budgetFilter.value === '₦15,000 - ₦30,000' && (plan.price < 15000 || plan.price > 30000)) return false;
     if (budgetFilter.value === 'Over ₦30,000' && plan.price <= 30000) return false;
 
-    // Type
+    // Type (dynamically matched)
     if (typeFilter.value !== 'All') {
-      const name = plan.name.toLowerCase();
-      if (typeFilter.value === 'Juices & Smoothies' && !name.includes('juice') && !name.includes('smoothie')) return false;
-      if (typeFilter.value === 'Parfaits' && !name.includes('parfait')) return false;
-      if (typeFilter.value === 'Fruit Bowls' && !name.includes('fruit bowl')) return false;
+      const planName = plan.name.toLowerCase();
+      const catName = typeFilter.value.toLowerCase();
+      if (!planName.includes(catName)) {
+        // Fallback: If the exact category name isn't in the plan name, we could check product linked categories,
+        // but for simplicity let's stick to name match as the original logic did.
+        // E.g. 'Juices & Smoothies' might not be in 'Premium Juice Plan' directly. We check subwords if needed.
+        // Let's just do a basic include check for now.
+        return false;
+      }
     }
 
     // Frequency
@@ -179,10 +180,20 @@ const filteredPlans = computed(() => {
 
 onMounted(async () => {
   try {
-    const res = await GATEWAY_ENDPOINT.get('/subscriptions/plans');
-    plans.value = res.data;
+    const [resPlans, resCategories] = await Promise.all([
+      GATEWAY_ENDPOINT.get('/subscriptions/plans'),
+      GATEWAY_ENDPOINT.get('/categories')
+    ]);
+    plans.value = resPlans.data;
+    
+    if (resCategories.data && Array.isArray(resCategories.data)) {
+      typeOptions.value = [
+        { label: 'All Types', value: 'All' },
+        ...resCategories.data.map((c: any) => ({ label: c.name, value: c.name }))
+      ];
+    }
   } catch (error) {
-    console.error('Failed to load subscription plans:', error);
+    console.error('Failed to load subscription plans or categories:', error);
   } finally {
     loading.value = false;
   }

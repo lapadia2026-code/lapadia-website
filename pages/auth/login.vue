@@ -26,7 +26,11 @@
     </div>
 
     <!-- Right Section: Login Form -->
-    <div class="w-full lg:w-1/2 flex items-center justify-center p-4 md:p-8 sm:p-6 md:p-12 bg-slate-50">
+    <div class="w-full lg:w-1/2 flex items-center justify-center p-4 md:p-8 sm:p-6 md:p-12 bg-slate-50 relative">
+      <NuxtLink to="/" class="absolute top-6 left-6 md:top-8 md:left-8 text-slate-500 hover:text-slate-800 transition-colors flex items-center gap-2 text-sm font-bold bg-white/80 p-2.5 rounded-xl shadow-sm border border-slate-200 backdrop-blur-sm z-10">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+        Back to Home
+      </NuxtLink>
       <div class="max-w-md w-full space-y-8">
         <div class="text-center lg:text-left">
           <h2 class="text-xl md:text-3xl font-extrabold text-slate-900 tracking-tight">Sign in</h2>
