@@ -65,7 +65,14 @@
                   />
                 </div>
                 <div class="space-y-2 sm:col-span-2">
-                  <label class="text-xs font-bold text-slate-700">Street Address <span class="text-rose-500">*</span></label>
+                  <div class="flex justify-between items-end">
+                    <label class="text-xs font-bold text-slate-700">Street Address <span class="text-rose-500">*</span></label>
+                    <button type="button" @click="useCurrentLocation" :disabled="isLocating" class="text-xs text-emerald-600 font-bold hover:underline flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed">
+                      <span v-if="isLocating" class="w-3 h-3 border-2 border-emerald-500/30 border-t-emerald-600 rounded-full animate-spin"></span>
+                      <svg v-else class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                      {{ isLocating ? 'Locating...' : 'Use current location' }}
+                    </button>
+                  </div>
                   <input v-model="orderData.streetAddress" required type="text" class="w-full px-5 md:px-8 py-3 bg-white border border-slate-200 rounded-xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all font-medium" placeholder="e.g. 15 Awolowo Road, Ikoyi" />
                 </div>
                 <div class="space-y-2 sm:col-span-2">
@@ -98,6 +105,7 @@
               <input v-model="orderData.deliveryMethod" value="pickup" type="radio" name="delivery_method" class="absolute right-5 top-5 text-emerald-600 focus:ring-emerald-500 w-5 h-5 border-slate-300" />
               <span class="font-extrabold text-slate-900 mb-1 text-lg">Pickup</span>
               <span class="text-sm text-slate-500 font-medium">Pick up your order in-store</span>
+              <span v-if="settings?.pickupLocation" class="text-xs text-slate-500 mt-1 block">📍 {{ settings.pickupLocation }}</span>
               <span class="mt-4 text-sm font-bold text-emerald-600 bg-emerald-100 w-fit px-3 py-1 rounded-md">Free</span>
             </label>
             <label :class="['relative flex flex-col p-6 rounded-2xl cursor-pointer transition-all border-2', orderData.deliveryMethod === 'delivery' ? 'border-emerald-500 bg-emerald-50/50' : 'border-slate-200 hover:border-emerald-200 bg-white']">
@@ -510,6 +518,47 @@ const isFrequencyDropdownOpen = ref(false);
 const promoCodeInput = ref('');
 const appliedPromo = ref<any>(null);
 const validatingPromo = ref(false);
+const isLocating = ref(false);
+
+const useCurrentLocation = () => {
+  if (!navigator.geolocation) {
+    showToast({ title: 'Error', message: 'Geolocation is not supported by your browser', type: 'error' });
+    return;
+  }
+
+  isLocating.value = true;
+
+  navigator.geolocation.getCurrentPosition(
+    async (position) => {
+      try {
+        const { latitude, longitude } = position.coords;
+        // Basic reverse geocoding via Nominatim
+        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+        const data = await res.json();
+        
+        if (data && data.address) {
+          const street = data.address.road || '';
+          const houseNumber = data.address.house_number || '';
+          const suburb = data.address.suburb || data.address.neighbourhood || '';
+          const city = data.address.city || data.address.town || data.address.county || '';
+          
+          orderData.value.streetAddress = [houseNumber, street, suburb, city].filter(Boolean).join(', ');
+          showToast({ title: 'Success', message: 'Address filled from GPS', type: 'success' });
+        } else {
+          showToast({ title: 'Error', message: 'Could not resolve address', type: 'error' });
+        }
+      } catch (err) {
+        showToast({ title: 'Error', message: 'Failed to fetch address details', type: 'error' });
+      } finally {
+        isLocating.value = false;
+      }
+    },
+    (error) => {
+      isLocating.value = false;
+      showToast({ title: 'Error', message: 'Failed to get your location', type: 'error' });
+    }
+  );
+};
 
 const lagosLGAs = [
   'Agege', 'Ajeromi-Ifelodun', 'Alimosho', 'Amuwo-Odofin', 'Apapa',
@@ -592,6 +641,15 @@ onMounted(async () => {
       const user = JSON.parse(userStr);
       orderData.value.fullName = user.name || '';
       orderData.value.email = user.email || '';
+      if (user.phone) {
+        // Assume format is missing country code for now, or handle appropriately
+        // For simplicity, just set it to phone. If the user stored +23480..., this might need splitting
+        // but let's just set phone as they typed it
+        orderData.value.phone = user.phone;
+      }
+      if (user.alternativePhone) {
+        orderData.value.altPhone = user.alternativePhone;
+      }
     } catch (e) {
       console.error(e);
     }
@@ -605,6 +663,8 @@ const handleAuthSuccess = (user: any) => {
   showAuthModal.value = false;
   orderData.value.fullName = user.name || '';
   orderData.value.email = user.email || '';
+  if (user.phone) orderData.value.phone = user.phone;
+  if (user.alternativePhone) orderData.value.altPhone = user.alternativePhone;
   showToast({ title: 'Success', message: 'You have been securely signed in.', type: 'success' });
 };
 

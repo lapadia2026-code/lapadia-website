@@ -69,7 +69,11 @@
           </div>
           <div class="space-y-2">
             <label class="text-sm font-medium text-slate-700">Phone Number</label>
-            <input type="tel" v-model="form.phone" placeholder="Enter your phone number" class="w-full px-5 md:px-8 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors" />
+            <input type="tel" v-model="form.phone" placeholder="Enter your primary phone number" class="w-full px-5 md:px-8 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors" />
+          </div>
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-slate-700">Alternative Phone Number</label>
+            <input type="tel" v-model="form.alternativePhone" placeholder="Enter an alternative phone number (e.g. WhatsApp)" class="w-full px-5 md:px-8 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors" />
           </div>
           
           <div class="pt-6 border-t border-slate-100">
@@ -118,6 +122,7 @@ const saving = ref(false);
 const form = reactive({
   name: '',
   phone: '',
+  alternativePhone: '',
   savedAddresses: [] as string[]
 });
 
@@ -147,6 +152,7 @@ onMounted(() => {
         user.value = JSON.parse(userStr);
         form.name = user.value.name || '';
         form.phone = user.value.phone || '';
+        form.alternativePhone = user.value.alternativePhone || '';
         form.savedAddresses = user.value.savedAddresses || [];
       } catch(e) {}
     }
@@ -159,6 +165,7 @@ const updateProfile = async () => {
     const res = await GATEWAY_ENDPOINT_WITH_AUTH.post('/users/profile', {
       name: form.name,
       phone: form.phone,
+      alternativePhone: form.alternativePhone,
       savedAddresses: form.savedAddresses
     });
     
