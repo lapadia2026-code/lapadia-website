@@ -23,8 +23,8 @@
       </div>
 
       <div v-else-if="product" class="flex flex-col md:flex-row gap-12 md:gap-20 lg:gap-20">
-        <!-- Product Image (Hero style) -->
-        <div class="w-full md:w-1/2 flex items-center justify-center relative min-h-[400px] md:min-h-[600px]">
+        <!-- Product Image (Hero style with Carousel) -->
+        <div class="w-full md:w-1/2 flex flex-col items-center justify-center relative min-h-[400px] md:min-h-[600px]">
           <div 
             class="relative w-full max-w-[500px] mx-auto z-10 group cursor-crosshair"
             @mousemove="handleMouseMove"
@@ -37,8 +37,21 @@
               class="w-full h-full transition-transform duration-200 ease-out flex items-center justify-center mix-blend-multiply filter drop-shadow-2xl"
               :style="zoomStyle"
             >
-              <img :src="getHeroImage(product)" :alt="product.name" class="w-[85%] h-auto object-contain animate-float" />
+              <img :src="carouselImages[currentImageIndex]" :alt="product.name" class="w-[85%] h-auto object-contain animate-float" />
             </div>
+
+            <!-- Carousel Navigation Arrows -->
+            <button v-if="carouselImages.length > 1" @click.stop="prevImage" class="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-md transition-all text-slate-800 z-20">
+              <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+            </button>
+            <button v-if="carouselImages.length > 1" @click.stop="nextImage" class="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-md transition-all text-slate-800 z-20">
+              <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+            </button>
+          </div>
+          
+          <!-- Carousel Dots -->
+          <div v-if="carouselImages.length > 1" class="flex items-center gap-2 mt-6">
+            <button v-for="(img, idx) in carouselImages" :key="idx" @click="currentImageIndex = idx" :class="['w-2.5 h-2.5 rounded-full transition-all', currentImageIndex === idx ? 'bg-slate-800 scale-125' : 'bg-slate-300 hover:bg-slate-400']"></button>
           </div>
         </div>
         
@@ -182,6 +195,8 @@ const loading = ref(true);
 const product = ref<any>(null);
 const quantity = ref(1);
 
+const currentImageIndex = ref(0);
+
 // Map specific products to our custom AI generated images
 const getHeroImage = (prod: any) => {
   if (!prod) return '';
@@ -194,6 +209,33 @@ const getHeroImage = (prod: any) => {
   
   return prod.imageUrl || '/images/hero_orange.jpg'; // Fallback
 };
+
+const carouselImages = computed(() => {
+  if (product.value?.images && product.value.images.length > 0) {
+    return product.value.images;
+  } else if (product.value?.imageUrl) {
+    return [getHeroImage(product.value)]; // Fallback
+  }
+  return ['/images/hero_orange.jpg'];
+});
+
+const nextImage = () => {
+  if (currentImageIndex.value < carouselImages.value.length - 1) {
+    currentImageIndex.value++;
+  } else {
+    currentImageIndex.value = 0;
+  }
+};
+
+const prevImage = () => {
+  if (currentImageIndex.value > 0) {
+    currentImageIndex.value--;
+  } else {
+    currentImageIndex.value = carouselImages.value.length - 1;
+  }
+};
+
+
 
 // Zoom logic for the hero image
 const mouseX = ref(50);
