@@ -165,13 +165,13 @@
 
               <NuxtLink v-if="product.stock > 0" :to="`/products/${product._id || product.id}`" class="block">
                 <div class="relative w-full h-48 bg-white rounded-2xl mb-5 overflow-hidden flex items-center justify-center text-3xl md:text-5xl group-hover:scale-95 transition-transform duration-500 shadow-sm border border-slate-100 mix-blend-multiply">
-                  <img :src="getHeroImage(product)" :alt="product.name" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                  <img :src="getListImage(product, autoImageIndex)" :alt="product.name" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                 </div>
               </NuxtLink>
               <div v-else class="block opacity-75 cursor-not-allowed">
                 <div class="relative w-full h-48 bg-white rounded-2xl mb-5 overflow-hidden flex items-center justify-center text-3xl md:text-5xl group-hover:scale-95 transition-transform duration-500 shadow-sm border border-slate-100 mix-blend-multiply">
                   <div class="absolute top-2 left-2 z-10 bg-rose-500 text-white text-xs font-bold px-2 py-1 rounded">Out of Stock</div>
-                  <img :src="getHeroImage(product)" :alt="product.name" class="w-full h-full object-cover grayscale group-hover:scale-110 transition-transform duration-700" />
+                  <img :src="getListImage(product, autoImageIndex)" :alt="product.name" class="w-full h-full object-cover grayscale group-hover:scale-110 transition-transform duration-700" />
                 </div>
               </div>
               
@@ -274,6 +274,16 @@ const getHeroImage = (product: any) => {
   return '/images/hero_orange.jpg'; // Ultimate Fallback
 };
 
+const autoImageIndex = ref(0);
+let listCarouselInterval: any;
+
+const getListImage = (product: any, index: number) => {
+  if (product?.images && product.images.length > 0) {
+    return product.images[index % product.images.length];
+  }
+  return getHeroImage(product); // fallback to existing method
+};
+
 // Carousel Controls
 const setActiveIndex = (index: number) => {
   activeIndex.value = index;
@@ -293,10 +303,15 @@ const resetInterval = () => {
 onMounted(async () => {
   await getProducts({ limit: 12, trending: true });
   resetInterval();
+  
+  listCarouselInterval = setInterval(() => {
+    autoImageIndex.value++;
+  }, 2500);
 });
 
 onUnmounted(() => {
   if (carouselInterval) clearInterval(carouselInterval);
+  if (listCarouselInterval) clearInterval(listCarouselInterval);
 });
 </script>
 

@@ -48,14 +48,14 @@
 
           <NuxtLink v-if="product.stock > 0" :to="`/products/${product._id || product.id}`" class="block">
             <div class="relative w-full h-48 bg-slate-100 rounded-2xl mb-4 overflow-hidden flex items-center justify-center text-2xl md:text-4xl">
-              <img v-if="product.imageUrl" :src="product.imageUrl" :alt="product.name" class="w-full h-full object-cover" />
+              <img v-if="getListImage(product, autoImageIndex)" :src="getListImage(product, autoImageIndex)" :alt="product.name" class="w-full h-full object-cover transition-opacity duration-500" />
               <span v-else>{{ product.icon || '📦' }}</span>
             </div>
           </NuxtLink>
           <div v-else class="block opacity-75 cursor-not-allowed">
             <div class="relative w-full h-48 bg-slate-100 rounded-2xl mb-4 overflow-hidden flex items-center justify-center text-2xl md:text-4xl">
               <div class="absolute top-2 left-2 z-10 bg-rose-500 text-white text-xs font-bold px-2 py-1 rounded">Out of Stock</div>
-              <img v-if="product.imageUrl" :src="product.imageUrl" :alt="product.name" class="w-full h-full object-cover grayscale" />
+              <img v-if="getListImage(product, autoImageIndex)" :src="getListImage(product, autoImageIndex)" :alt="product.name" class="w-full h-full object-cover grayscale transition-opacity duration-500" />
               <span v-else>{{ product.icon || '📦' }}</span>
             </div>
           </div>
@@ -87,7 +87,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useGetProducts } from '~/composables/modules/products/useGetProducts';
 import { useGetCategories } from '~/composables/modules/categories/useGetCategories';
 import { useCart } from '~/composables/modules/cart/useCart';
@@ -105,10 +105,28 @@ const filteredProducts = computed(() => {
   return products.value.filter((p: any) => p.category?.toLowerCase() === activeCategory.value.toLowerCase());
 });
 
+const autoImageIndex = ref(0);
+let autoPlayInterval: any;
+
+const getListImage = (product: any, index: number) => {
+  if (product?.images && product.images.length > 0) {
+    return product.images[index % product.images.length];
+  }
+  return product?.imageUrl || null;
+};
+
 onMounted(async () => {
   await Promise.all([
     getProducts(),
     getCategories()
   ]);
+  
+  autoPlayInterval = setInterval(() => {
+    autoImageIndex.value++;
+  }, 2500);
+});
+
+onUnmounted(() => {
+  if (autoPlayInterval) clearInterval(autoPlayInterval);
 });
 </script>

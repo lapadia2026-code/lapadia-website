@@ -180,7 +180,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useCart } from '~/composables/modules/cart/useCart';
 import { useFavorites } from '~/composables/modules/favorites/useFavorites';
@@ -235,7 +235,7 @@ const prevImage = () => {
   }
 };
 
-
+let autoPlayInterval: any;
 
 // Zoom logic for the hero image
 const mouseX = ref(50);
@@ -291,6 +291,12 @@ onMounted(async () => {
   } finally {
     loading.value = false;
   }
+
+  autoPlayInterval = setInterval(nextImage, 3500);
+});
+
+onUnmounted(() => {
+  if (autoPlayInterval) clearInterval(autoPlayInterval);
 });
 
 const handleAddToCart = () => {
