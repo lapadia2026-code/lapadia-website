@@ -7,22 +7,36 @@ let isInitialized = false;
 
 export const useCart = () => {
   const { showToast } = useCustomToast();
+  const generateCartItemId = (product: any) => {
+    let id = product._id || product.id;
+    if (product.selectedVariant) {
+      id += `-${product.selectedVariant._id || product.selectedVariant.measurement}`;
+    }
+    if (product.selectedAddons && product.selectedAddons.length > 0) {
+      const addonIds = product.selectedAddons.map((a: any) => a._id).sort().join('-');
+      id += `-addons-${addonIds}`;
+    }
+    return id;
+  };
+
   const addToCart = (product: any, quantity: number = 1) => {
-    const existing = cart.value.find((item) => (item.product._id || item.product.id) === (product._id || product.id));
+    const cartItemId = generateCartItemId(product);
+    const existing = cart.value.find((item) => item.cartItemId === cartItemId);
+    
     if (existing) {
       existing.quantity += quantity;
     } else {
-      cart.value.push({ product, quantity });
+      cart.value.push({ cartItemId, product, quantity });
     }
     showToast({ title: 'Added to Cart', message: `${product.name} added to your cart.`, type: 'success' });
   };
 
-  const removeFromCart = (productId: string) => {
-    cart.value = cart.value.filter((item) => (item.product._id || item.product.id) !== productId);
+  const removeFromCart = (cartItemId: string) => {
+    cart.value = cart.value.filter((item) => item.cartItemId !== cartItemId);
   };
 
-  const updateQuantity = (productId: string, quantity: number) => {
-    const item = cart.value.find((item) => (item.product._id || item.product.id) === productId);
+  const updateQuantity = (cartItemId: string, quantity: number) => {
+    const item = cart.value.find((item) => item.cartItemId === cartItemId);
     if (item) {
       item.quantity = Math.max(1, quantity);
     }

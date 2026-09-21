@@ -39,12 +39,11 @@
                 <div class="flex flex-col sm:flex-row items-start sm:items-center gap-8 mb-12">
                   <div class="text-2xl md:text-4xl font-black text-slate-800">
                     ₦{{ activeProduct.price?.toLocaleString() }} 
-                    <span class="text-2xl text-slate-400 font-medium line-through ml-2">₦{{ (activeProduct.price * 1.2).toLocaleString() }}</span>
                   </div>
                   
                   <div class="flex items-center gap-3">
-                    <button @click.prevent="addToCart(activeProduct, 1)" class="px-6 py-3 border-2 border-slate-900 rounded-xl font-bold text-slate-900 hover:bg-slate-900 hover:text-white transition-colors flex items-center gap-2">
-                      Add to cart
+                    <button @click.prevent="router.push(`/products/${activeProduct._id}`)" class="px-6 py-3 border-2 border-slate-900 rounded-xl font-bold text-slate-900 hover:bg-slate-900 hover:text-white transition-colors flex items-center gap-2">
+                      View Options
                     </button>
                     <NuxtLink :to="`/products/${activeProduct._id || activeProduct.id}`" class="px-6 py-3 rounded-xl font-bold text-slate-900 shadow-lg hover:-translate-y-1 hover:shadow-xl transition-all flex items-center gap-2" :style="{ backgroundColor: activeColor, boxShadow: `0 10px 15px -3px ${activeColor}40` }">
                       Buy Now
@@ -102,17 +101,7 @@
               alt="placeholder" 
             />
           </div>
-          
-          <!-- Carousel Indicators -->
-          <div class="flex gap-3 mt-8 lg:mt-10 lg:pr-12 justify-center w-full lg:justify-end">
-            <button 
-              v-for="(_, index) in heroProducts" 
-              :key="'ind-'+index"
-              @click="setActiveIndex(index)"
-              class="h-2.5 rounded-full transition-all duration-500 shadow-sm"
-              :class="activeIndex === index ? 'w-10 bg-slate-900' : 'w-2.5 bg-slate-300 hover:bg-slate-400'"
-            ></button>
-          </div>
+
 
           <!-- Small text callout -->
           <div class="absolute bottom-20 -left-6 lg:left-0 bg-white/90 backdrop-blur-md p-4 rounded-2xl border border-white/50 shadow-xl max-w-[220px] hidden md:block z-20">
@@ -188,8 +177,8 @@
                   <div>
                     <span class="text-2xl font-black" :class="product.stock > 0 ? 'text-slate-900' : 'text-slate-400 line-through'">₦{{ product.price?.toLocaleString() }}</span>
                   </div>
-                  <button :disabled="product.stock <= 0" @click.prevent="addToCart(product, 1)" class="w-12 h-12 bg-[#FFCD42] text-slate-900 rounded-full flex items-center justify-center hover:bg-slate-900 hover:text-white transition-colors hover:scale-105 active:scale-95 shadow-lg group-hover:-translate-y-1 font-black text-xl disabled:bg-slate-300 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:shadow-none disabled:group-hover:translate-y-0 disabled:text-slate-500">
-                    +
+                  <button @click.prevent="router.push(`/products/${product._id}`)" class="w-12 h-12 bg-[#FFCD42] text-slate-900 rounded-full flex items-center justify-center hover:bg-slate-900 hover:text-white transition-colors hover:scale-105 active:scale-95 shadow-lg group-hover:-translate-y-1 font-black text-xl disabled:bg-slate-300 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:shadow-none disabled:group-hover:translate-y-0 disabled:text-slate-500">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                   </button>
                 </div>
               </div>
@@ -206,6 +195,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
+const router = useRouter();
 import { useGetProducts } from '~/composables/modules/products/useGetProducts';
 import { useCart } from '~/composables/modules/cart/useCart';
 import { useFavorites } from '~/composables/modules/favorites/useFavorites';
@@ -214,6 +204,8 @@ import WelcomeSubscriptionModal from '~/components/WelcomeSubscriptionModal.vue'
 const { loading, error, products, getProducts } = useGetProducts();
 const { addToCart } = useCart();
 const { toggleFavorite: toggleFav, isFavorite: checkFavorite } = useFavorites();
+import { useGetCategories } from '~/composables/modules/categories/useGetCategories';
+const { categories, getCategories } = useGetCategories();
 
 useSeoMeta({
   title: 'Lapadia Fresh - Groceries Delivered in Minutes',
@@ -226,10 +218,8 @@ useSeoMeta({
 const activeIndex = ref(0);
 let carouselInterval: any = null;
 
-import heroData from '~/data/hero-products.json';
-
 // Product subsets
-const heroProducts = ref(heroData);
+const heroProducts = computed(() => products.value || []);
 
 const activeProduct = computed(() => {
   if (!heroProducts.value.length) return null;
@@ -244,13 +234,8 @@ const suggestedProducts = computed(() => {
 
 // Extract unique categories for pills
 const uniqueCategories = computed(() => {
-  if (!products.value) return [];
-  const cats = new Set(products.value.map(p => p.category).filter(Boolean));
-  // Add some fallback mock ones if backend only has 1-2 categories for now
-  if (cats.size < 4) {
-    ['Smoothies', 'Juices', 'Detox', 'Fruits', 'Melon'].forEach(c => cats.add(c));
-  }
-  return Array.from(cats).slice(0, 6); // Max 6 pills
+  if (!categories.value) return [];
+  return categories.value.map((c: any) => c.name || c).slice(0, 6);
 });
 
 // Dynamic Colors for the split background
@@ -301,7 +286,10 @@ const resetInterval = () => {
 };
 
 onMounted(async () => {
-  await getProducts({ limit: 12, trending: true });
+  await Promise.all([
+    getProducts({ limit: 12, trending: true }),
+    getCategories()
+  ]);
   resetInterval();
   
   listCarouselInterval = setInterval(() => {

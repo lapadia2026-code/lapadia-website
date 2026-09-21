@@ -30,8 +30,8 @@
             <img src="@/assets/img/logo.jpg" class="h-20 w-auto rounded-full" />
           </div>
           <div>
-            <h2 class="text-3xl font-black tracking-tight mb-3">Welcome to Lapadia<span class="text-emerald-200">Fresh</span></h2>
-            <p class="text-emerald-50 text-lg font-medium leading-relaxed">Elevate your healthy lifestyle with our premium fruit subscriptions. Freshness delivered exactly when you need it.</p>
+            <h2 class="text-3xl font-black tracking-tight mb-3" v-html="welcomeModalConfig.title || 'Welcome to Lapadia<span class=\'text-emerald-200\'>Fresh</span>'"></h2>
+            <p class="text-emerald-50 text-lg font-medium leading-relaxed">{{ welcomeModalConfig.subtitle || 'Elevate your healthy lifestyle with our premium fruit subscriptions. Freshness delivered exactly when you need it.' }}</p>
           </div>
         </div>
       </div>
@@ -39,8 +39,8 @@
       <!-- Right Side: Carousel -->
       <div class="w-full md:w-7/12 p-6 md:p-8 flex flex-col relative bg-slate-50">
         <div class="text-center mb-6">
-          <h3 class="text-xl md:text-2xl font-black text-slate-900">Explore Our Subscriptions</h3>
-          <p class="text-sm text-slate-500 font-medium mt-1">Swipe to see what's trending</p>
+          <h3 class="text-xl md:text-2xl font-black text-slate-900">{{ welcomeModalConfig.carouselTitle || 'Explore Our Subscriptions' }}</h3>
+          <p class="text-sm text-slate-500 font-medium mt-1">{{ welcomeModalConfig.carouselSubtitle || 'Swipe to see what\'s trending' }}</p>
         </div>
 
         <div v-if="loading" class="flex-1 flex items-center justify-center min-h-[300px]">
@@ -82,7 +82,7 @@
                     </div>
                     <div class="text-right">
                       <div class="text-xl font-black text-slate-900">₦{{ plan.price?.toLocaleString() }}</div>
-                      <div class="text-xs font-medium text-slate-500">/ {{ plan.frequency }}</div>
+                      <div v-if="plan.frequency" class="text-xs font-medium text-slate-500">/ {{ plan.frequency }}</div>
                     </div>
                   </div>
                   
@@ -90,10 +90,18 @@
 
                   <div class="mt-auto">
                     <NuxtLink 
-                      :to="`/checkout?planId=${plan._id}`" 
+                      v-if="plan.frequency"
+                      :to="`/checkout?planId=${plan._id || plan.id}`" 
                       class="block w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white text-center font-bold rounded-xl transition-colors shadow-lg shadow-emerald-600/30 active:scale-95"
                     >
                       Subscribe Now
+                    </NuxtLink>
+                    <NuxtLink 
+                      v-else
+                      :to="`/products/${plan._id || plan.id}`" 
+                      class="block w-full py-3.5 px-4 bg-slate-900 hover:bg-slate-800 text-white text-center font-bold rounded-xl transition-colors shadow-lg shadow-slate-900/30 active:scale-95"
+                    >
+                      View Product
                     </NuxtLink>
                   </div>
                 </div>
@@ -131,8 +139,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { GATEWAY_ENDPOINT } from '~/api_factory/axios.config';
+import { useSettings } from '~/composables/modules/settings/useSettings';
+
+const { settings, getSettings } = useSettings();
+const welcomeModalConfig = computed(() => settings.value?.welcomeModalConfig || {});
 
 const isOpen = ref(false);
 const plans = ref<any[]>([]);
@@ -145,9 +157,10 @@ onMounted(async () => {
   
   if (!hasSeen) {
     // Small delay before showing modal
-    setTimeout(() => {
+    setTimeout(async () => {
       isOpen.value = true;
-      fetchPlans();
+      await getSettings();
+      await fetchPlans();
       localStorage.setItem('hasSeenWelcomeModal', 'true');
     }, 2500);
   }
@@ -155,13 +168,25 @@ onMounted(async () => {
 
 const fetchPlans = async () => {
   try {
-    const res = await GATEWAY_ENDPOINT.get('/subscriptions/plans');
-    // Show popular plans first, limit to a reasonable number for carousel (e.g., 5)
-    plans.value = res.data
-      .sort((a: any, b: any) => (b.isPopular ? 1 : 0) - (a.isPopular ? 1 : 0))
-      .slice(0, 5);
+    const [plansRes, productsRes] = await Promise.all([
+      GATEWAY_ENDPOINT.get('/subscriptions/plans').catch(() => ({ data: [] })),
+      GATEWAY_ENDPOINT.get('/products').catch(() => ({ data: { data: [] } }))
+    ]);
+    
+    const allPlans = plansRes.data || [];
+    const allProducts = productsRes.data?.data || productsRes.data || [];
+    
+    const combined = [...allPlans, ...allProducts];
+    
+    if (welcomeModalConfig.value.featuredItems && welcomeModalConfig.value.featuredItems.length > 0) {
+      plans.value = combined.filter((p: any) => welcomeModalConfig.value.featuredItems.includes(p._id || p.id));
+    } else {
+      plans.value = allPlans
+        .sort((a: any, b: any) => (b.isPopular ? 1 : 0) - (a.isPopular ? 1 : 0))
+        .slice(0, 5);
+    }
   } catch (error) {
-    console.error('Failed to load subscription plans for modal:', error);
+    console.error('Failed to load items for modal:', error);
   } finally {
     loading.value = false;
   }

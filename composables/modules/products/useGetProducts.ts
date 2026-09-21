@@ -6,11 +6,12 @@ export const useGetProducts = () => {
   const error = ref<string | null>(null);
   const products = ref<any[]>([]);
 
-  const getProducts = async (params?: any) => {
+  const getProducts = async (params: any = {}) => {
     loading.value = true;
     error.value = null;
     try {
-      const { data } = await productsApi.getProducts(params);
+      const fetchParams = { type: 'regular', ...params };
+      const { data } = await productsApi.getProducts(fetchParams);
       products.value = data?.data || data || [];
       return products.value;
     } catch (err: any) {

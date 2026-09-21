@@ -2,7 +2,7 @@
   <div class="py-6 md:py-10 pb-16 max-w-7xl mx-auto px-5 md:px-8">
     <div class="mb-12">
       <h1 class="text-2xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">All Products</h1>
-      <p class="text-lg text-slate-500 max-w-2xl">Browse our entire catalog of fresh groceries, pantry staples, and household items. Add directly to your cart or subscribe for recurring delivery.</p>
+      <p class="text-lg text-slate-500 max-w-2xl">Browse our entire catalog of fresh juices, smoothies, parfaits, and more. Add directly to your cart or subscribe for recurring delivery.</p>
     </div>
 
     <!-- Filters -->

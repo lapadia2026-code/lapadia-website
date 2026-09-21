@@ -14,21 +14,32 @@
     <div v-else class="flex flex-col lg:flex-row gap-12 md:gap-20">
       <!-- Cart Items -->
       <div class="flex-1 space-y-6">
-        <div v-for="item in cart" :key="item.product._id" class="flex gap-6 p-4 bg-white rounded-2xl border border-slate-100 shadow-sm items-center">
+        <div v-for="item in cart" :key="item.cartItemId" class="flex gap-6 p-4 bg-white rounded-2xl border border-slate-100 shadow-sm items-center">
           <div class="w-24 h-24 bg-slate-100 rounded-xl overflow-hidden flex items-center justify-center text-2xl md:text-4xl shrink-0">
             <img v-if="item.product.imageUrl" :src="item.product.imageUrl" :alt="item.product.name" class="w-full h-full object-cover" />
             <span v-else>{{ item.product.icon || '📦' }}</span>
           </div>
           <div class="flex-1">
             <h3 class="font-bold text-slate-900 text-lg mb-1">{{ item.product.name }}</h3>
-            <div class="text-emerald-600 font-medium mb-3">₦{{ Number(item.product.price).toLocaleString() }}</div>
+            <div class="text-emerald-600 font-medium mb-1">₦{{ Number(item.product.price).toLocaleString() }}</div>
+            
+            <div class="text-sm text-slate-500 mb-3 space-y-1">
+              <div v-if="item.product.selectedVariant">
+                <span class="font-medium text-slate-700">Size:</span> {{ item.product.selectedVariant.measurement }}
+              </div>
+              <div v-if="item.product.selectedAddons && item.product.selectedAddons.length > 0">
+                <span class="font-medium text-slate-700">Add-ons:</span> 
+                {{ item.product.selectedAddons.map(a => a.name).join(', ') }}
+              </div>
+            </div>
+
             <div class="flex items-center gap-4">
               <div class="flex items-center border border-slate-200 rounded-lg bg-white overflow-hidden">
-                <button @click="updateQuantity(item.product._id, item.quantity - 1)" class="w-8 h-8 flex items-center justify-center text-slate-500 hover:bg-slate-50 font-medium">-</button>
+                <button @click="updateQuantity(item.cartItemId, item.quantity - 1)" class="w-8 h-8 flex items-center justify-center text-slate-500 hover:bg-slate-50 font-medium">-</button>
                 <span class="w-10 text-center font-medium text-sm text-slate-900">{{ item.quantity }}</span>
-                <button @click="updateQuantity(item.product._id, item.quantity + 1)" class="w-8 h-8 flex items-center justify-center text-slate-500 hover:bg-slate-50 font-medium">+</button>
+                <button @click="updateQuantity(item.cartItemId, item.quantity + 1)" class="w-8 h-8 flex items-center justify-center text-slate-500 hover:bg-slate-50 font-medium">+</button>
               </div>
-              <button @click="removeFromCart(item.product._id)" class="text-sm text-rose-500 hover:text-rose-700 font-medium p-2 hover:bg-rose-50 rounded transition-colors" title="Remove item">
+              <button @click="removeFromCart(item.cartItemId)" class="text-sm text-rose-500 hover:text-rose-700 font-medium p-2 hover:bg-rose-50 rounded transition-colors" title="Remove item">
                 <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
               </button>
             </div>

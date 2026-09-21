@@ -112,8 +112,12 @@
               <input v-model="orderData.deliveryMethod" value="delivery" type="radio" name="delivery_method" class="absolute right-5 top-5 text-emerald-600 focus:ring-emerald-500 w-5 h-5 border-slate-300" />
               <span class="font-extrabold text-slate-900 mb-1 text-lg">Delivery</span>
               <span class="text-sm text-slate-500 font-medium">Have it delivered to your address</span>
-              <span class="mt-4 text-xs font-bold text-slate-600 bg-slate-100 w-full px-3 py-2 rounded-md leading-snug">
+              <span class="mt-2 text-xs font-bold text-slate-600 bg-slate-100 w-full px-3 py-2 rounded-md leading-snug block">
                 Delivery cost would be incurred by the customer and paid to the dispatch rider on arrival.
+              </span>
+              <span v-if="settings?.deliveryDuration" class="mt-2 text-xs font-bold text-emerald-700 bg-emerald-50 w-full px-3 py-2 rounded-md leading-snug block flex items-center gap-1.5">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                Estimated Delivery: {{ settings.deliveryDuration }}
               </span>
             </label>
           </div>
@@ -194,10 +198,7 @@
               <div class="mt-1">
                 <CustomSelect
                   v-model="orderData.subscriptionFrequency"
-                  :options="[
-                    {label: 'Weekly', value: 'weekly'},
-                    {label: 'Monthly', value: 'monthly'}
-                  ]"
+                  :options="frequencyOptions"
                 />
               </div>
             </div>
@@ -207,6 +208,14 @@
               <div>
                 <span class="block text-sm font-bold text-slate-800">Save my card for future purchases</span>
                 <span class="block text-xs text-slate-500 mt-1 font-medium">Required if you want to turn this order into a recurring subscription later.</span>
+              </div>
+            </label>
+            
+            <label v-if="isSubscriptionCheckout" class="flex items-start gap-3 mt-6 cursor-pointer group bg-white p-4 rounded-xl border border-slate-200 hover:border-emerald-300 transition-colors">
+              <input v-model="orderData.deliverAllAtOnce" type="checkbox" class="mt-1 rounded text-emerald-600 focus:ring-emerald-500 w-4 h-4 border-slate-300" />
+              <div>
+                <span class="block text-sm font-bold text-slate-800">Deliver all items at once</span>
+                <span class="block text-xs text-slate-500 mt-1 font-medium">Deliver everything in this subscription immediately with the first delivery.</span>
               </div>
             </label>
           </div>
@@ -281,7 +290,7 @@
 
           <div v-else>
             <div class="space-y-4 mb-6 max-h-[400px] overflow-y-auto pr-2">
-              <div class="flex justify-between items-center" v-for="item in cart" :key="item.product._id">
+              <div class="flex justify-between items-center" v-for="item in cart" :key="item.cartItemId">
                 <div class="flex items-center gap-3">
                   <div class="w-10 h-10 bg-slate-100 border border-slate-200 rounded-lg flex items-center justify-center text-sm flex-shrink-0">
                     <img v-if="item.product.imageUrl" :src="item.product.imageUrl" class="w-full h-full object-cover rounded-lg" />
@@ -289,19 +298,24 @@
                   </div>
                   <div>
                     <span class="text-sm font-bold text-slate-800 block truncate w-32" :title="item.product.name">{{ item.product.name }}</span>
+                    <div v-if="item.product.selectedVariant || item.product.selectedAddons?.length" class="text-[10px] text-slate-500 mt-0.5 truncate w-32">
+                      <span v-if="item.product.selectedVariant">{{ item.product.selectedVariant.measurement }}</span>
+                      <span v-if="item.product.selectedVariant && item.product.selectedAddons?.length"> | </span>
+                      <span v-if="item.product.selectedAddons?.length">+{{ item.product.selectedAddons.length }} Add-ons</span>
+                    </div>
                     <div class="flex items-center gap-3 mt-1">
                       <div class="flex items-center border border-slate-200 rounded bg-white overflow-hidden w-fit">
-                        <button type="button" @click.stop="updateQuantity(item.product._id, item.quantity - 1)" class="w-6 h-6 flex items-center justify-center text-slate-500 hover:bg-slate-50 font-medium text-xs">-</button>
+                        <button type="button" @click.stop="updateQuantity(item.cartItemId, item.quantity - 1)" class="w-6 h-6 flex items-center justify-center text-slate-500 hover:bg-slate-50 font-medium text-xs">-</button>
                         <span class="w-6 text-center font-medium text-xs text-slate-900">{{ item.quantity }}</span>
-                        <button type="button" @click.stop="updateQuantity(item.product._id, item.quantity + 1)" class="w-6 h-6 flex items-center justify-center text-slate-500 hover:bg-slate-50 font-medium text-xs">+</button>
+                        <button type="button" @click.stop="updateQuantity(item.cartItemId, item.quantity + 1)" class="w-6 h-6 flex items-center justify-center text-slate-500 hover:bg-slate-50 font-medium text-xs">+</button>
                       </div>
-                      <button type="button" @click.stop="removeFromCart(item.product._id)" class="text-rose-500 hover:text-rose-700 p-1 rounded hover:bg-rose-50" title="Remove">
+                      <button type="button" @click.stop="removeFromCart(item.cartItemId)" class="text-rose-500 hover:text-rose-700 p-1 rounded hover:bg-rose-50" title="Remove">
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                       </button>
                     </div>
                   </div>
                 </div>
-                <span class="font-bold text-slate-900">₦{{ (item.product.price * item.quantity).toLocaleString() }}</span>
+                <div class="text-sm font-bold text-slate-900">₦{{ (item.product.price * item.quantity).toLocaleString() }}</div>
               </div>
             </div>
             
@@ -472,6 +486,19 @@ const isSubscriptionCheckout = computed(() => !!route.query.planId || orderData.
 const subscriptionPlan = ref<any>(null);
 const checkoutPlanProducts = ref<any[]>([]);
 
+const frequencyOptions = computed(() => {
+  if (settings.value?.subscriptionFrequencies) {
+    return settings.value.subscriptionFrequencies.map((freq: string) => ({
+      label: freq.charAt(0).toUpperCase() + freq.slice(1),
+      value: freq
+    }));
+  }
+  return [
+    {label: 'Weekly', value: 'weekly'},
+    {label: 'Monthly', value: 'monthly'}
+  ];
+});
+
 const showSwapModal = ref(false);
 const selectedSwapProductIds = ref<string[]>([]);
 
@@ -585,6 +612,7 @@ const orderData = ref({
   saveDeliveryOptions: false,
   isSubscription: false,
   subscriptionFrequency: 'weekly',
+  deliverAllAtOnce: false,
   acceptedTerms: false
 });
 
@@ -730,10 +758,14 @@ const handleCheckout = async () => {
       : cart.value.map(item => ({
           productId: item.product._id,
           quantity: item.quantity,
-          priceAtPurchase: item.product.price
+          priceAtPurchase: item.product.price,
+          selectedVariant: item.product.selectedVariant,
+          selectedAddons: item.product.selectedAddons,
+          frequency: item.product.frequency
         })),
     isSubscription: isSubscriptionCheckout.value,
     subscriptionFrequency: route.query.planId ? undefined : orderData.value.subscriptionFrequency,
+    deliverAllAtOnce: orderData.value.deliverAllAtOnce,
     planId: route.query.planId ? route.query.planId : undefined,
     promoCode: appliedPromo.value ? appliedPromo.value.code : undefined,
     scheduledTime,

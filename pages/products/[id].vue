@@ -26,18 +26,15 @@
         <!-- Product Image (Hero style with Carousel) -->
         <div class="w-full md:w-1/2 flex flex-col items-center justify-center relative min-h-[400px] md:min-h-[600px]">
           <div 
-            class="relative w-full max-w-[500px] mx-auto z-10 group cursor-crosshair"
-            @mousemove="handleMouseMove"
-            @mouseleave="handleMouseLeave"
+            class="relative w-full max-w-[500px] mx-auto z-10 group"
           >
             <!-- Background glow behind bottle -->
             <div class="absolute inset-0 bg-white/40 blur-3xl rounded-full scale-75 transform -z-10"></div>
             
             <div 
-              class="w-full h-full transition-transform duration-200 ease-out flex items-center justify-center mix-blend-multiply filter drop-shadow-2xl"
-              :style="zoomStyle"
+              class="w-full h-[400px] md:h-[500px] transition-transform duration-200 ease-out flex items-center justify-center mix-blend-multiply filter drop-shadow-2xl"
             >
-              <img :src="carouselImages[currentImageIndex]" :alt="product.name" class="w-[85%] h-auto object-contain animate-float" />
+              <img :src="carouselImages[currentImageIndex]" :alt="product.name" class="w-full h-full object-cover rounded-2xl animate-float" />
             </div>
 
             <!-- Carousel Navigation Arrows -->
@@ -47,11 +44,6 @@
             <button v-if="carouselImages.length > 1" @click.stop="nextImage" class="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-md transition-all text-slate-800 z-20">
               <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
             </button>
-          </div>
-          
-          <!-- Carousel Dots -->
-          <div v-if="carouselImages.length > 1" class="flex items-center gap-2 mt-6">
-            <button v-for="(img, idx) in carouselImages" :key="idx" @click="currentImageIndex = idx" :class="['w-2.5 h-2.5 rounded-full transition-all', currentImageIndex === idx ? 'bg-slate-800 scale-125' : 'bg-slate-300 hover:bg-slate-400']"></button>
           </div>
         </div>
         
@@ -73,8 +65,65 @@
           </h1>
           
           <div class="text-xl md:text-3xl font-black text-slate-800 mb-6 flex items-end gap-3">
-            ₦{{ product.price?.toLocaleString() }}
-            <span class="text-xl text-slate-400 font-medium line-through mb-1">₦{{ (product.price * 1.2).toLocaleString() }}</span>
+            ₦{{ computedPrice.toLocaleString() }}
+          </div>
+          
+          <div v-if="product.variants && product.variants.length > 0" class="mb-6">
+            <h3 class="text-sm font-bold text-slate-900 uppercase tracking-widest mb-3">Select Measurement</h3>
+            <div class="flex flex-wrap gap-3">
+              <button
+                v-for="variant in product.variants"
+                :key="variant._id || variant.measurement"
+                @click="selectedVariant = variant"
+                :class="['px-6 py-3 rounded-xl font-bold border-2 transition-all', selectedVariant?.measurement === variant.measurement ? 'border-slate-900 bg-slate-900 text-white shadow-lg' : 'border-slate-200 bg-white text-slate-600 hover:border-slate-400']"
+                :disabled="variant.stock <= 0"
+              >
+                {{ variant.measurement }} <span class="text-sm opacity-80">(₦{{ variant.price.toLocaleString() }})</span>
+                <div v-if="variant.stock <= 0" class="text-xs text-rose-300 mt-1">Out of Stock</div>
+              </button>
+            </div>
+          </div>
+
+          <div v-if="availableAddons.length > 0" class="mb-8">
+            <h3 class="text-sm font-bold text-slate-900 uppercase tracking-widest mb-3">Optional Add-ons</h3>
+            <div class="space-y-3">
+              <label
+                v-for="addon in availableAddons"
+                :key="addon._id"
+                class="flex items-center justify-between p-4 bg-white border border-slate-200 rounded-xl cursor-pointer hover:border-slate-300 transition-colors"
+              >
+                <div class="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    :value="addon"
+                    v-model="selectedAddons"
+                    class="w-5 h-5 rounded text-slate-900 border-slate-300 focus:ring-slate-900"
+                  />
+                  <span class="font-semibold text-slate-800">{{ addon.name }}</span>
+                </div>
+                <span class="font-bold text-emerald-600">+₦{{ addon.price.toLocaleString() }}</span>
+              </label>
+            </div>
+          </div>
+          
+          <div v-if="product.purchaseFrequencies && product.purchaseFrequencies.length > 0" class="mb-8">
+            <h3 class="text-sm font-bold text-slate-900 uppercase tracking-widest mb-3">Purchase Frequency</h3>
+            <div class="flex flex-wrap gap-3">
+              <button
+                @click="selectedFrequency = null"
+                :class="['px-6 py-3 rounded-xl font-bold border-2 transition-all', !selectedFrequency ? 'border-emerald-600 bg-emerald-600 text-white shadow-lg' : 'border-slate-200 bg-white text-slate-600 hover:border-slate-400']"
+              >
+                One-time Purchase
+              </button>
+              <button
+                v-for="freq in product.purchaseFrequencies"
+                :key="freq"
+                @click="selectedFrequency = freq"
+                :class="['px-6 py-3 rounded-xl font-bold border-2 transition-all', selectedFrequency === freq ? 'border-emerald-600 bg-emerald-600 text-white shadow-lg' : 'border-slate-200 bg-white text-slate-600 hover:border-slate-400']"
+              >
+                Subscribe ({{ freq }})
+              </button>
+            </div>
           </div>
           
           <p class="text-lg text-slate-600 mb-8 leading-relaxed max-w-lg font-medium">
@@ -85,21 +134,49 @@
             Out of Stock
           </div>
 
-          <!-- Actions -->
-          <div class="flex flex-wrap items-center gap-4 mb-12">
-            <!-- Quantity Selector -->
-            <div class="flex items-center border border-slate-300 rounded-xl bg-white shadow-sm overflow-hidden h-14" :class="{ 'opacity-50 pointer-events-none': product.stock <= 0 }">
-              <button @click="quantity > 1 ? quantity-- : null" class="w-14 h-full flex items-center justify-center text-slate-400 hover:text-slate-900 hover:bg-slate-50 font-medium text-2xl transition-colors">-</button>
-              <span class="w-12 text-center font-bold text-slate-900 text-lg">{{ quantity }}</span>
-              <button @click="quantity++" class="w-14 h-full flex items-center justify-center text-slate-400 hover:text-slate-900 hover:bg-slate-50 font-medium text-xl transition-colors">+</button>
-            </div>
+          <!-- Order Summary / Receipt Visualization -->
+          <div class="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm mb-12 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-bl-[100px] -z-0"></div>
+            <h3 class="text-lg font-black text-slate-900 mb-6 relative z-10 border-b border-dashed border-slate-200 pb-4">Your Selection Summary</h3>
             
-            <!-- Add to Cart Button (Refined) -->
-            <button @click="handleAddToCart" :disabled="product.stock <= 0" class="h-14 px-8 bg-slate-900 text-white rounded-xl font-bold text-lg hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center gap-3 disabled:bg-slate-400 disabled:cursor-not-allowed disabled:shadow-none disabled:hover:translate-y-0">
-              <span>{{ product.stock > 0 ? 'Add to Cart' : 'Out of Stock' }}</span>
-              <span v-if="product.stock > 0" class="w-1 h-1 rounded-full bg-slate-600"></span>
-              <span v-if="product.stock > 0" class="text-slate-300 text-sm">₦{{ (product.price * quantity).toLocaleString() }}</span>
-            </button>
+            <div class="space-y-4 relative z-10 mb-6 text-sm font-medium">
+              <div class="flex justify-between text-slate-700">
+                <span>{{ product.name }} <span v-if="selectedVariant">({{ selectedVariant.measurement }})</span></span>
+                <span>₦{{ (selectedVariant ? selectedVariant.price : (product.price || 0)).toLocaleString() }}</span>
+              </div>
+              
+              <div v-for="addon in selectedAddons" :key="addon._id" class="flex justify-between text-slate-500">
+                <span>+ {{ addon.name }}</span>
+                <span>₦{{ addon.price.toLocaleString() }}</span>
+              </div>
+
+              <div v-if="selectedFrequency" class="flex justify-between text-emerald-600 font-bold bg-emerald-50 p-2 rounded-lg -mx-2 px-2 mt-2">
+                <span>Subscription</span>
+                <span>{{ selectedFrequency }}</span>
+              </div>
+            </div>
+
+            <div class="border-t border-slate-900 border-dashed pt-4 mb-8 flex justify-between items-end relative z-10">
+              <span class="text-slate-500 font-bold uppercase tracking-wider text-xs">Total Amount</span>
+              <span class="text-3xl font-black text-slate-900">₦{{ computedPrice.toLocaleString() }}</span>
+            </div>
+
+            <!-- Actions inside Summary -->
+            <div class="flex flex-col sm:flex-row items-center gap-4 relative z-10">
+              <!-- Quantity Selector -->
+              <div class="flex items-center border-2 border-slate-200 rounded-xl bg-white overflow-hidden h-14 w-full sm:w-auto shrink-0" :class="{ 'opacity-50 pointer-events-none': product.stock <= 0 }">
+                <button @click="quantity > 1 ? quantity-- : null" class="w-14 h-full flex items-center justify-center text-slate-500 hover:text-slate-900 hover:bg-slate-50 font-bold text-2xl transition-colors">-</button>
+                <span class="w-12 text-center font-black text-slate-900 text-lg">{{ quantity }}</span>
+                <button @click="quantity++" class="w-14 h-full flex items-center justify-center text-slate-500 hover:text-slate-900 hover:bg-slate-50 font-bold text-xl transition-colors">+</button>
+              </div>
+              
+              <!-- Add to Cart Button -->
+              <button @click="handleAddToCart" :disabled="!canAddToCart" class="w-full h-14 bg-slate-900 text-white rounded-xl font-bold text-lg hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-3 disabled:bg-slate-300 disabled:text-slate-500 disabled:cursor-not-allowed disabled:shadow-none disabled:hover:translate-y-0">
+                <span>{{ stockAvailable ? 'Add to Cart' : 'Out of Stock' }}</span>
+                <span v-if="stockAvailable" class="w-1.5 h-1.5 rounded-full bg-slate-700"></span>
+                <span v-if="stockAvailable" class="text-slate-300 text-sm font-medium">₦{{ (computedPrice * quantity).toLocaleString() }}</span>
+              </button>
+            </div>
           </div>
 
           <!-- Ingredients & Allergens -->
@@ -194,8 +271,40 @@ const { toggleFavorite: toggleFav, isFavorite: checkFavorite } = useFavorites();
 const loading = ref(true);
 const product = ref<any>(null);
 const quantity = ref(1);
+const selectedVariant = ref<any>(null);
+const selectedAddons = ref<any[]>([]);
+const availableAddons = ref<any[]>([]);
+const selectedFrequency = ref<string | null>(null);
 
 const currentImageIndex = ref(0);
+
+const computedPrice = computed(() => {
+  let basePrice = product.value?.price || 0;
+  if (selectedVariant.value) {
+    basePrice = selectedVariant.value.price;
+  } else if (product.value?.variants && product.value.variants.length > 0) {
+    basePrice = Math.min(...product.value.variants.map((v: any) => v.price));
+  }
+  const addonsPrice = selectedAddons.value.reduce((total, addon) => total + (addon.price || 0), 0);
+  return basePrice + addonsPrice;
+});
+
+const stockAvailable = computed(() => {
+  if (!product.value) return false;
+  if (selectedVariant.value) return selectedVariant.value.stock > 0;
+  if (product.value.variants && product.value.variants.length > 0) {
+    return product.value.variants.some((v: any) => v.stock > 0);
+  }
+  return product.value.stock > 0;
+});
+
+const canAddToCart = computed(() => {
+  if (!stockAvailable.value) return false;
+  if (product.value?.variants && product.value.variants.length > 0 && !selectedVariant.value) return false;
+  return true;
+});
+
+import { addonsApi } from '~/api_factory/modules/addons';
 
 // Map specific products to our custom AI generated images
 const getHeroImage = (prod: any) => {
@@ -271,10 +380,26 @@ const toggleFavorite = async () => {
   }
 };
 
+const fetchAddons = async () => {
+  if (!product.value?.availableAddonCategories || product.value.availableAddonCategories.length === 0) return;
+  try {
+    const { data } = await addonsApi.$_get_addons();
+    availableAddons.value = data.filter((addon: any) => product.value.availableAddonCategories.includes(addon.categoryId?._id || addon.categoryId));
+  } catch (error) {
+    console.error('Failed to load addons', error);
+  }
+};
+
 onMounted(async () => {
   try {
     const res = await GATEWAY_ENDPOINT.get(`/products/${route.params.id}`);
     product.value = res.data;
+    
+    if (product.value.variants && product.value.variants.length > 0) {
+      selectedVariant.value = product.value.variants.find((v: any) => v.stock > 0) || null;
+    }
+    
+    await fetchAddons();
     
     useSeoMeta({
       title: `${product.value.name} - Lapadia Fresh`,
@@ -300,8 +425,15 @@ onUnmounted(() => {
 });
 
 const handleAddToCart = () => {
-  if (product.value) {
-    addToCart(product.value, quantity.value);
+  if (product.value && canAddToCart.value) {
+    const cartItem = {
+      ...product.value,
+      price: computedPrice.value, // dynamic price
+      selectedVariant: selectedVariant.value,
+      selectedAddons: selectedAddons.value,
+      frequency: selectedFrequency.value
+    };
+    addToCart(cartItem, quantity.value);
     router.push('/cart');
   }
 };

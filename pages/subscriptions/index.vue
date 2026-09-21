@@ -2,8 +2,11 @@
   <div class="py-6 md:py-10 pb-16 bg-slate-50 min-h-screen">
     <div class="max-w-7xl mx-auto px-5 md:px-8 text-center">
       <div class="mb-16">
-        <h1 class="text-2xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-6">Never run out of essentials.</h1>
-        <p class="text-xl text-slate-500 max-w-2xl mx-auto">Choose a plan that fits your household. We'll automatically deliver your groceries exactly when you need them.</p>
+        <h1 class="text-2xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-6">Never run out of your favorite blends.</h1>
+        <p class="text-xl text-slate-500 max-w-2xl mx-auto mb-4">Choose a plan that fits your lifestyle. We'll automatically deliver your fresh juices, smoothies, and parfaits exactly when you need them.</p>
+        <p class="text-sm font-semibold text-emerald-600 bg-emerald-50 max-w-xl mx-auto py-2 px-4 rounded-lg">
+          Note: All subscriptions are 250CL for juices and smoothies, and 8oz for parfaits.
+        </p>
       </div>
 
       <!-- Dynamic Pricing Plans Grid -->
@@ -48,11 +51,7 @@
           <label class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1 pl-1">Frequency</label>
           <CustomSelect
             v-model="frequencyFilter"
-            :options="[
-              {label: 'All Frequencies', value: 'All'},
-              {label: 'Weekly', value: 'Weekly'},
-              {label: 'Monthly', value: 'Monthly'}
-            ]"
+            :options="frequencyOptions"
           />
         </div>
       </div>
@@ -137,8 +136,10 @@
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { GATEWAY_ENDPOINT } from '~/api_factory/axios.config';
+import { useSettings } from '~/composables/modules/settings/useSettings';
 
 const router = useRouter();
+const { settings, getSettings } = useSettings();
 const plans = ref<any[]>([]);
 const loading = ref(true);
 
@@ -146,6 +147,18 @@ const budgetFilter = ref('All');
 const typeFilter = ref('All');
 const frequencyFilter = ref('All');
 const typeOptions = ref<{label: string, value: string}[]>([{ label: 'All Types', value: 'All' }]);
+
+const frequencyOptions = computed(() => {
+  const options = [{ label: 'All Frequencies', value: 'All' }];
+  if (settings.value?.subscriptionFrequencies) {
+    settings.value.subscriptionFrequencies.forEach((freq: string) => {
+      // Capitalize first letter for label
+      const label = freq.charAt(0).toUpperCase() + freq.slice(1);
+      options.push({ label, value: freq });
+    });
+  }
+  return options;
+});
 
 const filteredPlans = computed(() => {
   return plans.value.filter(plan => {
@@ -170,8 +183,7 @@ const filteredPlans = computed(() => {
     // Frequency
     if (frequencyFilter.value !== 'All') {
       const freq = plan.frequency.toLowerCase();
-      if (frequencyFilter.value === 'Weekly' && freq !== 'weekly') return false;
-      if (frequencyFilter.value === 'Monthly' && freq !== 'monthly') return false;
+      if (frequencyFilter.value.toLowerCase() !== freq) return false;
     }
 
     return true;
@@ -180,9 +192,10 @@ const filteredPlans = computed(() => {
 
 onMounted(async () => {
   try {
-    const [resPlans, resCategories] = await Promise.all([
+    const [resPlans, resCategories, _] = await Promise.all([
       GATEWAY_ENDPOINT.get('/subscriptions/plans'),
-      GATEWAY_ENDPOINT.get('/categories')
+      GATEWAY_ENDPOINT.get('/categories'),
+      getSettings()
     ]);
     plans.value = resPlans.data;
     
